@@ -5,7 +5,7 @@ export default function LoadingScreen() {
   return (
     <Box
       flex={1}
-      bg="$blue800" // Or replace with a custom blue hex: "#007AFF"
+      bg="$backgroundDark950" // Or replace with a custom blue hex: "#007AFF"
       justifyContent="center"
       alignItems="center"
       px="$4"

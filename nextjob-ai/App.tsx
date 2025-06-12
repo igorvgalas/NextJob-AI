@@ -41,8 +41,8 @@ export default function App() {
   }, []);
 
   return (
-    <GluestackUIProvider mode={colorMode}>
-      <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
+      <GluestackUIProvider mode={colorMode}>
         <AuthProvider>
           <NavigationContainer>
             {isLoading ? (
@@ -62,7 +62,7 @@ export default function App() {
             )}
           </NavigationContainer>
         </AuthProvider>
-      </QueryClientProvider>
-    </GluestackUIProvider>
+      </GluestackUIProvider>
+    </QueryClientProvider>
   );
 }

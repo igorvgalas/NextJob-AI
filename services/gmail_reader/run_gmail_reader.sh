@@ -1,13 +1,13 @@
 #!/bin/bash
 
-LOG="/Users/cheef/Documents/job_search_agent/services/gmail_reader/cron.log"
+LOG="/Users/cheef/Documents/nextjob-ai/services/gmail_reader/cron.log"
 
 {
   echo "=== Cron START $(date) ==="
   whoami
   pwd
   echo "Python path: $(which python)"
-  cd /Users/cheef/Documents/job_search_agent/services/gmail_reader || {
+  cd /Users/cheef/Documents/nextjob-ai/services/gmail_reader || {
     echo "❌ Cannot cd to target directory"
     exit 1
   }
@@ -17,7 +17,7 @@ LOG="/Users/cheef/Documents/job_search_agent/services/gmail_reader/cron.log"
   source venv/bin/activate || echo "⚠️ venv activation failed"
 
   echo "Running main.py..."
-  /Users/cheef/Documents/job_search_agent/services/gmail_reader/venv/bin/python main.py
+  /Users/cheef/Documents/nextjob-ai/services/gmail_reader/venv/bin/python main.py
 
   echo "=== Cron END ==="
 } >> "$LOG" 2>&1

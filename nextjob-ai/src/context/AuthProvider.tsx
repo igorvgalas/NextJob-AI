@@ -1,8 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, createContext, useContext } from "react";
 import { ContextProvider, AuthResource } from "./AuthContext";
 import { useApi } from "../api/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Box, Text } from "@gluestack-ui/themed";
+import { Box, Spinner } from "@gluestack-ui/themed";
+
+export const AuthTokenContext = createContext<{
+  setToken: (token: string | null) => void;
+}>({ setToken: () => {} });
 
 export default function AuthProvider({
   children,
@@ -42,10 +46,16 @@ export default function AuthProvider({
         alignItems="center"
         bg="$backgroundDark950"
       >
-        <Text color="$textLight900">Loading...</Text>
+        <Spinner size="large" color="$white" />
       </Box>
     );
   }
 
-  return <ContextProvider value={data ?? null}>{children}</ContextProvider>;
+  return (
+    <AuthTokenContext.Provider value={{ setToken }}>
+      <ContextProvider value={data ?? null}>{children}</ContextProvider>
+    </AuthTokenContext.Provider>
+  );
 }
+
+export const useAuthToken = () => useContext(AuthTokenContext);

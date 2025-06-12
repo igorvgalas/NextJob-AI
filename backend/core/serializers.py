@@ -37,14 +37,16 @@ class JobOfferSerializer(serializers.ModelSerializer):
             "id",
             "match_score",
             "reason",
-            "technologies_matched",  # accepts list
-            "technologies_matched_display",  # returns string
+            "technologies_matched", 
+            "technologies_matched_display", 
             "title",
             "company",
             "location",
             "description",
             "apply_link",
             "created_at",
+            "user",
+            "email",
         ]
 
     def create(self, validated_data):

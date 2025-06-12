@@ -6,7 +6,7 @@ from .models import JobOffer
 
 @admin.register(JobOffer)
 class JobOfferAdmin(admin.ModelAdmin):
-    list_display = ('id','title', 'company', 'location', 'created_at')
+    list_display = ('id','title', 'company', 'location', 'created_at', 'user', 'email')
     search_fields = ('title', 'company__name', 'location')
     list_filter = ('location', 'created_at')
     ordering = ('-created_at',)

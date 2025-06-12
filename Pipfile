@@ -11,6 +11,7 @@ pylint-django = "*"
 djoser = "*"
 simplejwt = "*"
 dotenv = "*"
+django-filter = "*"
 
 [dev-packages]
 

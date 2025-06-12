@@ -5,6 +5,7 @@ import {
   Box,
   Text,
   Heading,
+  Image,
   Input,
   InputField,
   InputSlot,
@@ -18,6 +19,12 @@ import {
   Icon,
   HStack,
 } from "@gluestack-ui/themed";
+import {
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+} from "react-native";
 import { ArrowLeft, MapPin } from "lucide-react-native";
 import { useApiMutation } from "../api/api";
 import { useNavigation } from "@react-navigation/native";
@@ -67,84 +74,109 @@ export default function RegisterScreen() {
     const response = register(values);
   };
 
-  const handleLogout = async () => {
-      await AsyncStorage.removeItem("token");
-      await AsyncStorage.removeItem("refreshToken");
-      navigation.navigate("Login" as never);
-    };
-
   return (
-    <>
-    <Box bg="$blue800" px="$4" pt="$12">
-        <Pressable onPress={() => navigation.goBack()}>
-          <HStack alignItems="center" mb="$4">
-            <Icon as={ArrowLeft} size="md" color="$white" />
-            <Text color="$white" fontSize="$md" ml="$2">
-              Back
-            </Text>
-          </HStack>
-        </Pressable>
-      </Box>
-      <Box flex={1} bg="$blue800" justifyContent="center" px="$12">
-        <Formik
-          initialValues={{ username: "", email: "", password: "" }}
-          onSubmit={handleSubmit}
+    <KeyboardAvoidingView
+      style={{ flex: 1, backgroundColor: "#18181b" }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
+      <ScrollView
+        contentContainerStyle={{
+          flexGrow: 1,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+        keyboardShouldPersistTaps="handled"
+        style={{ backgroundColor: "transparent" }}
+      >
+        <Box
+          pt="$12"
+          px="$4"
+          flex={1}
+          justifyContent="flex-start"
+          bg="$backgroundDark950"
+          borderRadius="$lg"
+          shadowColor="$black"
+          shadowOffset={{ width: 0, height: 2 }}
+          shadowOpacity={0.15}
+          shadowRadius={8}
+          width="100%"
+          minHeight="100%"
         >
-          {({ handleChange, handleSubmit, values }) => (
-            <FormControl>
-              <VStack space="xl">
-                <Heading color="$white">Register</Heading>
+          <Pressable onPress={() => navigation.goBack()}>
+            <HStack alignItems="center">
+              <Icon as={ArrowLeft} size="md" color="$white" />
+              <Text color="$white" ml="$2">Back</Text>
+            </HStack>
+          </Pressable>
+          <Image
+            source={require("../../assets/logo.png")}
+            alt="NextJob AI Logo"
+            width={300}
+            height={300}
+            resizeMode="contain"
+            alignSelf="center"
+          />
+          <Formik
+            initialValues={{ username: "", email: "", password: "" }}
+            onSubmit={handleSubmit}
+          >
+            {({ handleChange, handleSubmit, values }) => (
+              <FormControl width="100%" px="$8">
+                <VStack space="xl">
+                  <VStack space="xs">
+                    <Text color="$white">Username</Text>
+                    <Input borderColor="$coolGray600">
+                      <InputField
+                        type="text"
+                        value={values.username}
+                        onChangeText={handleChange("username")}
+                        placeholder="Enter your username"
+                        color="$white"
+                        placeholderTextColor="$coolGray400"
+                      />
+                    </Input>
+                  </VStack>
 
-                <VStack space="xs">
-                  <Text color="$white">Username</Text>
-                  <Input borderColor="$white">
-                    <InputField
-                      type="text"
-                      value={values.username}
-                      onChangeText={handleChange("username")}
-                      placeholder="Enter your username"
-                    />
-                  </Input>
+                  <VStack space="xs">
+                    <Text color="$white">Email</Text>
+                    <Input borderColor="$coolGray600">
+                      <InputField
+                        type="text"
+                        value={values.email}
+                        onChangeText={handleChange("email")}
+                        placeholder="Enter your email"
+                        color="$white"
+                        placeholderTextColor="$coolGray400"
+                      />
+                    </Input>
+                  </VStack>
+
+                  <VStack space="xs">
+                    <Text color="$white">Password</Text>
+                    <Input borderColor="$coolGray600">
+                      <InputField
+                        type={showPassword ? "text" : "password"}
+                        value={values.password}
+                        onChangeText={handleChange("password")}
+                        placeholder="Enter your password"
+                        color="$white"
+                        placeholderTextColor="$coolGray400"
+                      />
+                      <InputSlot onPress={handleTogglePassword}>
+                        <InputIcon as={showPassword ? EyeIcon : EyeOffIcon} />
+                      </InputSlot>
+                    </Input>
+                  </VStack>
+
+                  <Button onPress={() => handleSubmit()}>
+                    <ButtonText>Register</ButtonText>
+                  </Button>
                 </VStack>
-
-                <VStack space="xs">
-                  <Text color="$white">Email</Text>
-                  <Input borderColor="$white">
-                    <InputField
-                      type="text"
-                      value={values.email}
-                      onChangeText={handleChange("email")}
-                      placeholder="Enter your email"
-                    />
-                  </Input>
-                </VStack>
-
-                <VStack space="xs">
-                  <Text color="$white">Password</Text>
-                  <Input borderColor="$white">
-                    <InputField
-                      type={showPassword ? "text" : "password"}
-                      value={values.password}
-                      onChangeText={handleChange("password")}
-                      placeholder="Enter your password"
-                    />
-                    <InputSlot onPress={handleTogglePassword}>
-                      <InputIcon as={showPassword ? EyeIcon : EyeOffIcon} />
-                    </InputSlot>
-                  </Input>
-                </VStack>
-
-                <Button onPress={() => handleSubmit()}>
-                  <ButtonText>Register</ButtonText>
-                </Button>
-                <Button variant="outline" onPress={handleLogout}>
-                  <ButtonText>Logout</ButtonText>
-                </Button>
-              </VStack>
-            </FormControl>
-          )}
-        </Formik>
-      </Box>
-    </>
+              </FormControl>
+            )}
+          </Formik>
+        </Box>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }

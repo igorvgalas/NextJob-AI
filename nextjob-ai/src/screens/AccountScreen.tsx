@@ -5,6 +5,7 @@ import { useAuth } from "../context/AuthContext";
 import AppLayout from "../layouts/AppLayout";
 import { ChevronDown, ChevronRight } from "lucide-react-native";
 
+
 const sections = [
   { title: "Account", content: "Account details and security settings." },
   { title: "Profile", content: "Edit your profile information." },
@@ -17,10 +18,8 @@ const AccountScreen: React.FC = () => {
   const user = useAuth();
   const [expanded, setExpanded] = useState<string | null>(null);
 
-  const handleLogout = () => {};
-
   return (
-    <AppLayout onLogout={handleLogout}>
+    <AppLayout>
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <Box flex={1} bg="$backgroundDark950" px="$4" py="$6">
           <VStack alignItems="center" space="md" mt={32}>

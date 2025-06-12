@@ -2,14 +2,11 @@ import React, { useState, useRef } from "react";
 import { FlatList } from "react-native";
 import { Box, Text } from "@gluestack-ui/themed";
 import JobCard from "../components/JobCard";
-import { useNavigation } from "@react-navigation/native";
 import AppLayout from "../layouts/AppLayout";
 import { useAuth } from "../context/AuthContext";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { queryApi } from "../api/api";
 
 export default function HomeScreen() {
-  const navigation = useNavigation();
   const user = useAuth();
   const [jobs, setJobs] = useState<any[]>([]);
   const [nextUrl, setNextUrl] = useState<string | null>("/api/jobs/?page=1");
@@ -45,16 +42,10 @@ export default function HomeScreen() {
   // Initial load
   React.useEffect(() => {
     if (!isMounted.current) {
-      fetchJobs("/api/jobs/?page=1");
+      fetchJobs("/api/jobs/?page=1&user=" + user.id);
       isMounted.current = true;
     }
   }, []);
-
-  const handleLogout = async () => {
-    await AsyncStorage.removeItem("token");
-    await AsyncStorage.removeItem("refreshToken");
-    navigation.navigate("Login" as never);
-  };
 
   const handleEndReached = () => {
     if (nextUrl && !loadingMore) {
@@ -89,7 +80,7 @@ export default function HomeScreen() {
   }
 
   return (
-    <AppLayout onLogout={handleLogout}>
+    <AppLayout>
       <Box px="$4" pt="$6" pb="$2" bg="$backgroundDark950">
         <Box
           bg="$blue800"

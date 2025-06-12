@@ -43,11 +43,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_filters',
     'djoser',
     "corsheaders",
     'rest_framework',
     'core'
 ]
+
+GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID', '')
+GOOGLE_CLIENT_SECRET = os.getenv('GOOGLE_CLIENT_SECRET', '')
+IOS_GOOGLE_CLIENT_ID = os.getenv('IOS_GOOGLE_CLIENT_ID', '')
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
