@@ -11,6 +11,9 @@ import LoginScreen from "./src/screens/LoginScreen";
 import RegisterScreen from "./src/screens/RegisterScreen";
 import AccountScreen from "./src/screens/AccountScreen";
 import CompleteProfileScreen from "./src/screens/CompleteProfileScreen";
+import LoadingScreen from "./src/screens/LoadingScreen";
+import SkillsScreen from "./src/screens/SkillsScreen";
+import NotificationScreen from "./src/screens/NotificationScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -38,14 +41,24 @@ export default function App() {
           <NavigationContainer>
             <Stack.Navigator
               id={undefined}
+              initialRouteName="Loading"
               screenOptions={{ headerShown: false }}
             >
+              <Stack.Screen name="Loading" component={LoadingScreen} />
               <Stack.Screen name="Login" component={LoginScreen} />
               <Stack.Screen name="Home" component={HomeScreen} />
               <Stack.Screen name="JobDetails" component={JobDetailsScreen} />
               <Stack.Screen name="Register" component={RegisterScreen} />
               <Stack.Screen name="Account" component={AccountScreen} />
-              <Stack.Screen name="CompleteProfile" component={CompleteProfileScreen} />
+              <Stack.Screen name="Skills" component={SkillsScreen} />
+              <Stack.Screen
+                name="Notification"
+                component={NotificationScreen}
+              />
+              <Stack.Screen
+                name="CompleteProfile"
+                component={CompleteProfileScreen}
+              />
             </Stack.Navigator>
           </NavigationContainer>
         </AuthProvider>

@@ -18,7 +18,7 @@ export default function CompleteProfileScreen({ navigation, route }) {
   const { user } = route.params || {};
   const token = AsyncStorage.getItem("token");
   const updateProfile = useApiMutation<any, any>((values) => ({
-    url: `/users/me/`,
+    url: `/auth/users/me/`,
     options: {
       method: "PUT",
       headers: {
@@ -31,13 +31,20 @@ export default function CompleteProfileScreen({ navigation, route }) {
 
   return (
     <AuthLayout>
-      <Text color="$white" fontSize={24} pt={24} mb={4} fontWeight="$bold" textAlign="center">
+      <Text
+        color="$white"
+        fontSize={24}
+        pt={24}
+        mb={4}
+        fontWeight="$bold"
+        textAlign="center"
+      >
         Complete Your Profile
       </Text>
       <Text color="$coolGray400" fontSize={16} textAlign="center" mb={8}>
         Please fill in your details to complete your profile.
       </Text>
-      
+
       <Formik
         initialValues={{
           username: user?.username || "",

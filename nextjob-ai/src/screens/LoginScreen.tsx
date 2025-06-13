@@ -102,7 +102,8 @@ export default function LoginScreen() {
 
           if (missingProfile) {
             console.log("Redirecting to CompleteProfile");
-            navigation.navigate("CompleteProfile", { user });
+            // @ts-expect-error
+            navigation.navigate("CompleteProfile" as never, { user } as never);
           } else {
             console.log("Redirecting to Home");
             navigation.navigate("Home" as never);
