@@ -38,6 +38,14 @@ export default function AuthProvider({
     }
   );
 
+  useEffect(() => {
+    if (loaded && token && !isFetching && !data) {
+      // Користувача не знайдено — видаляємо токени
+      AsyncStorage.multiRemove(["token", "refreshToken"]);
+      setToken(null);
+    }
+  }, []);
+
   if (!loaded || (token && isFetching)) {
     return (
       <Box
@@ -53,7 +61,9 @@ export default function AuthProvider({
 
   return (
     <AuthTokenContext.Provider value={{ setToken }}>
-      <ContextProvider value={data ?? null}>{children}</ContextProvider>
+      <ContextProvider value={data ?? null}>
+        {children}
+      </ContextProvider>
     </AuthTokenContext.Provider>
   );
 }

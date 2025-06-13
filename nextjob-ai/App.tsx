@@ -1,17 +1,16 @@
-import React, { useState, useEffect } from "react";
 import "@/global.css";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useColorScheme } from "react-native";
-import LoadingScreen from "./src/screens/LoadingScreen";
 import HomeScreen from "./src/screens/HomeScreen";
 import JobDetailsScreen from "./src/screens/JobDetailsScreen";
 import AuthProvider from "./src/context/AuthProvider";
 import LoginScreen from "./src/screens/LoginScreen";
 import RegisterScreen from "./src/screens/RegisterScreen";
 import AccountScreen from "./src/screens/AccountScreen";
+import CompleteProfileScreen from "./src/screens/CompleteProfileScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -31,35 +30,23 @@ export const queryClient = new QueryClient({
 
 export default function App() {
   const colorMode = useColorScheme();
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
-    return () => clearTimeout(timeout);
-  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
       <GluestackUIProvider mode={colorMode}>
         <AuthProvider>
           <NavigationContainer>
-            {isLoading ? (
-              <LoadingScreen />
-            ) : (
-              <Stack.Navigator
-                id={undefined}
-                screenOptions={{ headerShown: false }}
-              >
-                <Stack.Screen name="Login" component={LoginScreen} />
-                <Stack.Screen name="Home" component={HomeScreen} />
-                <Stack.Screen name="JobDetails" component={JobDetailsScreen} />
-                <Stack.Screen name="Register" component={RegisterScreen} />
-                <Stack.Screen name="Account" component={AccountScreen} />
-                {/* Add other screens as needed */}
-              </Stack.Navigator>
-            )}
+            <Stack.Navigator
+              id={undefined}
+              screenOptions={{ headerShown: false }}
+            >
+              <Stack.Screen name="Login" component={LoginScreen} />
+              <Stack.Screen name="Home" component={HomeScreen} />
+              <Stack.Screen name="JobDetails" component={JobDetailsScreen} />
+              <Stack.Screen name="Register" component={RegisterScreen} />
+              <Stack.Screen name="Account" component={AccountScreen} />
+              <Stack.Screen name="CompleteProfile" component={CompleteProfileScreen} />
+            </Stack.Navigator>
           </NavigationContainer>
         </AuthProvider>
       </GluestackUIProvider>

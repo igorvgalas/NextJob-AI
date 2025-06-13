@@ -44,6 +44,7 @@ const NavBar: React.FC<NavBarProps> = ({ onLogout }) => {
         >
           <Menu.Item
             key="logout"
+            textValue="Logout"
             onPress={() => {
               setMenuOpen(false);
               onLogout();

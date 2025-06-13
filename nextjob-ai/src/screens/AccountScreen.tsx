@@ -1,10 +1,16 @@
 import React, { useState } from "react";
-import { Box, Text, VStack, Avatar, Divider, Pressable } from "@gluestack-ui/themed";
+import {
+  Box,
+  Text,
+  VStack,
+  Avatar,
+  Divider,
+  Pressable,
+} from "@gluestack-ui/themed";
 import { ScrollView, Dimensions } from "react-native";
 import { useAuth } from "../context/AuthContext";
 import AppLayout from "../layouts/AppLayout";
 import { ChevronDown, ChevronRight } from "lucide-react-native";
-
 
 const sections = [
   { title: "Account", content: "Account details and security settings." },
@@ -23,9 +29,15 @@ const AccountScreen: React.FC = () => {
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <Box flex={1} bg="$backgroundDark950" px="$4" py="$6">
           <VStack alignItems="center" space="md" mt={32}>
-            <Avatar size="2xl" bg="$backgroundDark900" borderColor="$blue500" borderWidth={2}>
+            <Avatar
+              size="2xl"
+              bg="$backgroundDark900"
+              borderColor="$blue500"
+              borderWidth={2}
+            >
               <Text color="$white" fontSize="$2xl" fontWeight="$bold">
-                {user.first_name[0]?.toUpperCase() + user.last_name[0]?.toUpperCase()}
+                {user.first_name[0]?.toUpperCase() +
+                  user.last_name[0]?.toUpperCase()}
               </Text>
             </Avatar>
             <Text color="$white" fontSize="$lg" fontWeight="$bold">
@@ -57,7 +69,9 @@ const AccountScreen: React.FC = () => {
                 >
                   <Pressable
                     width="100%"
-                    onPress={() => setExpanded(isExpanded ? null : section.title)}
+                    onPress={() =>
+                      setExpanded(isExpanded ? null : section.title)
+                    }
                     flexDirection="row"
                     justifyContent="space-between"
                     alignItems="center"

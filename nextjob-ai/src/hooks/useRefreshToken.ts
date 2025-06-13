@@ -14,7 +14,10 @@ export async function refreshToken(): Promise<string | null> {
     body: JSON.stringify({ refresh }),
   });
 
-  if (!response.ok) return null;
+  if (!response.ok) {
+    await AsyncStorage.multiRemove(["token", "refreshToken"]);
+    return null;
+  }
 
   const data = await response.json();
   await AsyncStorage.setItem("token", data.access);

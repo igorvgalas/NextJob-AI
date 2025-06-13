@@ -12,14 +12,14 @@ from rest_framework.response import Response
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models import JobOffer
-from .serializers import JobOfferSerializer
+from .models import JobOffer, UserSkill
+from .serializers import JobOfferSerializer, UserSkillSerializer
 from .filter import JobOfferFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
 
 
-class JobOfferPagination(pagination.PageNumberPagination):
+class StandardPagination(pagination.PageNumberPagination):
     page_size = 10
     page_size_query_param = 'page_size'
     max_page_size = 50
@@ -30,7 +30,7 @@ class JobOfferViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = JobOfferSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = JobOfferFilter
-    pagination_class = JobOfferPagination
+    pagination_class = StandardPagination
 
     @action(detail=False, methods=['post'], url_path='bulk_create')
     def bulk_create(self, request):
@@ -42,6 +42,37 @@ class JobOfferViewSet(viewsets.ReadOnlyModelViewSet):
             serializer.save()
             return Response({"detail": f"{len(serializer.validated_data)} job offers created."}, status=201)
         return Response(serializer.errors, status=400)
+
+
+class UserSkillViewSet(viewsets.ModelViewSet):
+    queryset = UserSkill.objects.all()
+    serializer_class = UserSkillSerializer
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_fields = ['user', 'skill']
+    search_fields = ['skill__name']
+    ordering_fields = ['user', 'skill']
+    pagination_class = StandardPagination
+
+    @action(detail=False, methods=['post'], url_path='set_skills')
+    def set_skills(self, request):
+        """
+        Replace all UserSkill entries for a user with the provided skills and proficiencies.
+        Expects: {"user": user_id, "skills": {skill_id: proficiency, ...}}
+        """
+        user_id = request.data.get('user')
+        skills_dict = request.data.get('skills', {})
+        if not user_id or not isinstance(skills_dict, dict):
+            return Response({"detail": "user and skills (dict) are required."}, status=400)
+        # Remove existing UserSkill for this user
+        UserSkill.objects.filter(user_id=user_id).delete()
+        # Create new UserSkill for each skill/proficiency
+        new_user_skills = []
+        for skill_id, proficiency in skills_dict.items():
+            user_skill = UserSkill.objects.create(
+                user_id=user_id, skill_id=skill_id, proficiency=proficiency)
+            new_user_skills.append(user_skill)
+        serializer = self.get_serializer(new_user_skills, many=True)
+        return Response(serializer.data)
 
 
 class GoogleAuthView(APIView):
@@ -87,8 +118,6 @@ class GoogleAuthView(APIView):
         User = get_user_model()
         user, created = User.objects.get_or_create(email=email, defaults={
             "username": email,
-            "first_name": first_name,
-            "last_name": last_name,
         })
 
         refresh = RefreshToken.for_user(user)
@@ -97,6 +126,7 @@ class GoogleAuthView(APIView):
             "refresh": str(refresh),
             "user": {
                 "pk": user.pk,
+                "username": user.username,  # Added username to response
                 "email": user.email,
                 "first_name": user.first_name,
                 "last_name": user.last_name,

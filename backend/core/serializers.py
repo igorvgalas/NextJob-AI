@@ -3,7 +3,7 @@ from djoser.serializers import UserCreateSerializer as BaseUserCreateSerializer
 from djoser.serializers import UserSerializer as BaseUserSerializer
 from rest_framework import serializers
 
-from .models import JobOffer
+from .models import JobOffer, UserSkill, Skill
 
 User = get_user_model()  # Import the user model dynamically
 
@@ -16,6 +16,7 @@ class UserCreateSerializer(BaseUserCreateSerializer):
         """
         fields = ['id', 'username', 'password',
                   'email', 'first_name', 'last_name']
+
 
 class UserSerializer(BaseUserSerializer):
 
@@ -37,8 +38,8 @@ class JobOfferSerializer(serializers.ModelSerializer):
             "id",
             "match_score",
             "reason",
-            "technologies_matched", 
-            "technologies_matched_display", 
+            "technologies_matched",
+            "technologies_matched_display",
             "title",
             "company",
             "location",
@@ -57,3 +58,12 @@ class JobOfferSerializer(serializers.ModelSerializer):
 
     def get_technologies_matched_display(self, obj):
         return obj.technologies_matched.split(", ")
+
+
+class UserSkillSerializer(serializers.ModelSerializer):
+    skill = serializers.PrimaryKeyRelatedField(queryset=Skill.objects.all())
+    skill_name = serializers.CharField(source='skill.name', read_only=True)
+
+    class Meta:
+        model = UserSkill
+        fields = ['id', 'user', 'skill', 'skill_name', 'proficiency']
