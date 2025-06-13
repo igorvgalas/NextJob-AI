@@ -119,18 +119,6 @@ export default function LoginScreen() {
     handleGoogleResponse();
   }, [response]);
 
-  // useEffect(() => {
-  //   (async () => {
-  //     const token = await AsyncStorage.getItem("token");
-  //     if (token) {
-  //       navigation.reset({
-  //         index: 0,
-  //         routes: [{ name: "Home" as never }],
-  //       });
-  //     }
-  //   })();
-  // }, []);
-
   return (
     <AuthLayout>
       <Image

@@ -59,6 +59,10 @@ class JobOfferSerializer(serializers.ModelSerializer):
     def get_technologies_matched_display(self, obj):
         return obj.technologies_matched.split(", ")
 
+class SkillSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Skill
+        fields = ['id', 'name']
 
 class UserSkillSerializer(serializers.ModelSerializer):
     skill = serializers.PrimaryKeyRelatedField(queryset=Skill.objects.all())

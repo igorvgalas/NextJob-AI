@@ -12,8 +12,8 @@ from rest_framework.response import Response
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models import JobOffer, UserSkill
-from .serializers import JobOfferSerializer, UserSkillSerializer
+from .models import JobOffer, UserSkill, Skill
+from .serializers import JobOfferSerializer, UserSkillSerializer, SkillSerializer
 from .filter import JobOfferFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
@@ -43,6 +43,18 @@ class JobOfferViewSet(viewsets.ReadOnlyModelViewSet):
             return Response({"detail": f"{len(serializer.validated_data)} job offers created."}, status=201)
         return Response(serializer.errors, status=400)
 
+class SkillViewSet(viewsets.ModelViewSet):
+    queryset = Skill.objects.all()
+    serializer_class = SkillSerializer
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_fields = ['name']
+    search_fields = ['name']
+    ordering_fields = ['name']
+    pagination_class = None 
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.order_by('name')
 
 class UserSkillViewSet(viewsets.ModelViewSet):
     queryset = UserSkill.objects.all()
