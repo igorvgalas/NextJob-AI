@@ -39,24 +39,9 @@ class Skill(models.Model):
 class UserSkill(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_skills')
-    skill = models.ForeignKey(
-        Skill, on_delete=models.CASCADE, related_name='user_skills', null=True, blank=True, default=None)
-    proficiency = models.CharField(
-        max_length=50,
-        choices=[
-            ('beginner', 'Beginner'),
-            ('intermediate', 'Intermediate'),
-            ('advanced', 'Advanced'),
-            ('expert', 'Expert')
-        ],
-        default='beginner'
-    )
+    skills = models.ManyToManyField(Skill, related_name='user_skills', blank=True)
 
-    class Meta:
-        unique_together = ('user', 'skill')
-
-    def __str__(self):
-        return f"{self.user} - {self.skill} ({self.proficiency})"
-
-    def get_skill_name(self):
-        return self.skill
+    def get_skill_ids(self):
+        if self.pk:
+            return list(self.skills.all().values_list('id', flat=True))  # pylint:disable=no-member
+        return []

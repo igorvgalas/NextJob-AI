@@ -43,6 +43,7 @@ class JobOfferViewSet(viewsets.ReadOnlyModelViewSet):
             return Response({"detail": f"{len(serializer.validated_data)} job offers created."}, status=201)
         return Response(serializer.errors, status=400)
 
+
 class SkillViewSet(viewsets.ModelViewSet):
     queryset = Skill.objects.all()
     serializer_class = SkillSerializer
@@ -50,40 +51,26 @@ class SkillViewSet(viewsets.ModelViewSet):
     filterset_fields = ['name']
     search_fields = ['name']
     ordering_fields = ['name']
-    pagination_class = None 
+    pagination_class = None
 
     def get_queryset(self):
         queryset = super().get_queryset()
         return queryset.order_by('name')
 
+
 class UserSkillViewSet(viewsets.ModelViewSet):
     queryset = UserSkill.objects.all()
     serializer_class = UserSkillSerializer
+    http_method_names = ['get', 'post', 'patch', 'delete', 'head', 'options']
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    filterset_fields = ['user', 'skill']
-    search_fields = ['skill__name']
-    ordering_fields = ['user', 'skill']
-    pagination_class = StandardPagination
+    filterset_fields = ['user']
+    search_fields = ['user__username']
+    ordering_fields = ['user__username']
+    pagination_class = None
 
-    @action(detail=False, methods=['post'], url_path='set_skills')
-    def set_skills(self, request):
-        """
-        Replace all UserSkill entries for a user with the provided skills and proficiencies.
-        Expects: {"user": user_id, "skills": {skill_id: proficiency, ...}}
-        """
-        user_id = request.data.get('user')
-        skills_dict = request.data.get('skills', {})
-        if not user_id or not isinstance(skills_dict, dict):
-            return Response({"detail": "user and skills (dict) are required."}, status=400)
-        # Remove existing UserSkill for this user
-        UserSkill.objects.filter(user_id=user_id).delete()
-        # Create new UserSkill for each skill/proficiency
-        new_user_skills = []
-        for skill_id, proficiency in skills_dict.items():
-            user_skill = UserSkill.objects.create(
-                user_id=user_id, skill_id=skill_id, proficiency=proficiency)
-            new_user_skills.append(user_skill)
-        serializer = self.get_serializer(new_user_skills, many=True)
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
 

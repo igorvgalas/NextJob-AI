@@ -5,94 +5,145 @@ import { useApi, useApiMutation } from "../api/api";
 import { Formik } from "formik";
 import SectionedMultiSelect from "react-native-sectioned-multi-select";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import { useAuth } from "../context/AuthContext";
 
 type Skills = {
   id: string;
   name: string;
 };
 
+type UserSkills = {
+  id: string;
+  user: string;
+  skills: Skills[];
+};
+
+type FormValues = {
+  skills: number[];
+};
+
+type UserSkillsPayload = {
+  skill_ids: number[];
+};
+
 export default function SkillsScreen() {
+  const user = useAuth();
+  const { data: userSkills, isLoading: userSkillsLoading } = useApi<UserSkills>(
+    {
+      url: `/api/userskills/?user=${user.id}`,
+      options: {},
+    },
+    {
+      queryKey: ["userSkills"],
+    }
+  );
+  // Defensive: ensure userSkills is always an array
+  const safeUserSkills = Array.isArray(userSkills) ? userSkills : [];
+  const userSkillId = safeUserSkills[0]?.id;
+  const initialSkillIds =
+    safeUserSkills[0]?.skills?.map((skill) => skill.id) || [];
+
   const { data: skills, isLoading } = useApi<Skills[]>(
     {
       url: "/api/skills/",
       options: {},
     },
     {
-      meta: {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      },
-      queryKey: ["skills"],
+      queryKey: ["userSkills", user.id],
     }
   );
-  console.log("Skills:", skills);
 
-  const mutation = useApiMutation<any, any>((data) => ({
-    url: "api/userskills/",
-    options: {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+  const mutation = useApiMutation<UserSkillsPayload, any>(
+    (data) => ({
+      url: `/api/userskills/${userSkillId || ""}/`,
+      options: {
+        method: "PATCH",
+        body: data,
       },
-      body: data,
-    },
-  }));
+    }),
+    undefined,
+    ["userSkills", user.id]
+  );
 
   return (
     <AppLayout>
-        <Formik
-          initialValues={{ skills: [] }}
-          onSubmit={(values) => {
-            console.log("Submitted:", values.skills);
-            mutation.mutate({ skills: values.skills });
-          }}
-        >
-          {({ values, setFieldValue, handleSubmit }) => (
-            <VStack space="md" padding={4} width="100%">
-              <SectionedMultiSelect
-                items={skills?.map((s) => ({ id: s.id, name: s.name })) || []}
-                uniqueKey="id"
-                selectText="Select your skills"
-                onSelectedItemsChange={(selected) =>
-                  setFieldValue("skills", selected)
-                }
-                selectedItems={values.skills}
-                searchPlaceholderText="Search skills..."
-                IconRenderer={Icon}
-                showDropDowns={true}
-                styles={{
-                  selectToggle: {
-                    backgroundColor: "black",
-                    borderColor: "#4b5563",
-                    borderWidth: 1,
-                    padding: 12,
-                    borderRadius: 10,
-                  },
-                  selectToggleText: {
-                    color: "#f9fafb",
-                    fontSize: 16,
-                  },
-                  itemText: {
-                    color: "black",
-                  },
-                  selectedItemText: {
-                    color: "#10b981",
-                  },
-                  confirmText: {
-                    color: "white",
-                  },
-                }}
-              />
-              <Button bgColor="$blue600" onPress={() => handleSubmit()}>
-                <ButtonText>Submit Skills</ButtonText>
-              </Button>
-              <Button bgColor="$blue600" onPress={() => setFieldValue("skills", [])}>
-                <ButtonText>Clear Skills</ButtonText>
-              </Button>
-            </VStack>
-          )}
-        </Formik>
+      <Formik<FormValues>
+        enableReinitialize={true}
+        initialValues={{ skills: initialSkillIds }}
+        onSubmit={(values) => {
+          console.log("Submitted:", values.skills);
+          mutation.mutate({ skill_ids: values.skills });
+        }}
+      >
+        {({ values, setFieldValue, handleSubmit, dirty }) => (
+          <VStack space="md" padding={4} width="100%">
+            <SectionedMultiSelect
+              items={skills?.map((s) => ({ id: s.id, name: s.name })) || []}
+              uniqueKey="id"
+              selectText="Select your skills"
+              onSelectedItemsChange={(selected) =>
+                setFieldValue("skills", selected)
+              }
+              selectedItems={values.skills}
+              // selectedItems={initialSkillIds}
+              searchPlaceholderText="Search skills..."
+              searchIconComponent={
+                <Icon name="search" size={20} color="#ffffff" /> // White color icon
+              }
+              IconRenderer={Icon}
+              showDropDowns={true}
+              styles={{
+                selectToggle: {
+                  backgroundColor: "black",
+                  borderColor: "#4b5563",
+                  borderWidth: 1,
+                  padding: 12,
+                  borderRadius: 10,
+                },
+                selectToggleText: {
+                  color: "#f9fafb",
+                  fontSize: 16,
+                },
+                item: {
+                  backgroundColor: "#1f2937",
+                },
+                itemText: {
+                  color: "white",
+                },
+                selectedItemText: {
+                  color: "#10b981",
+                },
+                confirmText: {
+                  color: "white",
+                },
+                container: {
+                  backgroundColor: "#1f2937",
+                },
+                searchBar: {
+                  backgroundColor: "#374151",
+                },
+                separator: {
+                  backgroundColor: "#1f2937",
+                },
+              }}
+            />
+
+            <Button
+              bgColor="$blue600"
+              onPress={() => handleSubmit()}
+              isDisabled={!dirty}
+            >
+              <ButtonText>Submit Skills</ButtonText>
+            </Button>
+            <Button
+              bgColor="$blue600"
+              onPress={() => setFieldValue("skills", [])}
+            >
+              <ButtonText>Clear Skills</ButtonText>
+            </Button>
+          </VStack>
+        )}
+      </Formik>
     </AppLayout>
   );
 }

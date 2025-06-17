@@ -20,6 +20,23 @@ HEADERS = {
 }
 
 
+def fetch_user_tech_stack(user_id: int) -> list[str]:
+    try:
+        response = requests.get(f"http://0.0.0.0:8000/api/userskills/?user={user_id}", timeout=10)
+        response.raise_for_status()
+        data = response.json()
+
+        if isinstance(data, list) and data:
+            skill_objs = data[0].get("skills", [])
+            return [skill["name"] for skill in skill_objs]
+        else:
+            print("⚠️ No user skills found")
+            return []
+
+    except requests.RequestException as e:
+        print(f"❌ Failed to fetch user skills: {e}")
+        return []
+
 def send_bulk_to_api(jobs: list[dict]):
     try:
         response = requests.post(
@@ -32,10 +49,14 @@ def send_bulk_to_api(jobs: list[dict]):
         print(f"❌ Failed to reach API: {e}")
 
 
-def analyze_and_send(jobs):
+def analyze_and_send(jobs: dict) -> None:
     print(f"\n🔎 Analyzing {len(jobs)} job offers...")
     # Pass the list of job objects directly to analyze_job
-    analysis_result = analyze_job(jobs)
+    tech_stack = fetch_user_tech_stack(user_id=19)  # Replace with actual user ID logic
+    if not tech_stack:
+        print("⚠️ No user tech stack found, skipping analysis.")
+        return
+    analysis_result = analyze_job(jobs, tech_stack)
 
     if not analysis_result:
         print("❌ No valid analysis result returned")
