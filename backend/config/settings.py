@@ -44,10 +44,17 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_filters',
+    'debug_toolbar',
     'djoser',
     "corsheaders",
     'rest_framework',
     'core'
+]
+
+INTERNAL_IPS = [
+    # ...
+    "127.0.0.1",
+    # ...
 ]
 
 GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID', '')
@@ -60,6 +67,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -118,6 +126,9 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.AllowAny'],
     'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework_simplejwt.authentication.JWTAuthentication'],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    # 'DEFAULT_RENDERER_CLASSES': (
+    #     'rest_framework.renderers.JSONRenderer',
+    # ),
     'PAGE_SIZE': 10,
 }
 
@@ -143,6 +154,105 @@ SIMPLE_JWT = {
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    # 'filters': {
+    #     'ignore_task_received': {
+    #         '()': 'core.logging_filters.IgnoreCeleryReceivedFilter',
+    #     },
+    # },
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+        'file_info': {
+            'class': 'logging.FileHandler',
+            'filename': f'{BASE_DIR}/logs/logging_info.log',
+            'level': 'INFO',
+            'formatter': 'verbose',
+        },
+        'file_error': {
+            'class': 'logging.FileHandler',
+            'filename': f'{BASE_DIR}/logs/logging_error.log',
+            'level': 'WARNING',
+            'formatter': 'verbose',
+        },
+    },
+    'root': {
+        'handlers': ['console', 'file_info', 'file_error'],
+        'level': 'INFO',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'file_info', 'file_error'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+            'propagate': False,
+        },
+        'django.db.backends': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'django.server': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'celery.worker': {
+            'handlers': ['console', 'file_error'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'celery.app.trace': {
+            'handlers': ['console', 'file_error'],
+            'level': 'INFO',
+            # 'filters': ['ignore_task_received'],
+            'propagate': False,
+        },
+        'celery.worker.strategy': {
+            'handlers': ['console', 'file_error'],
+            'level': 'INFO',
+            # 'filters': ['ignore_task_received'],
+            'propagate': False,
+        },
+        'celery.beat': {
+            'handlers': ['console', 'file_error'],
+            'level': 'INFO',
+            # 'filters': ['ignore_task_received'], 
+            'propagate': False,
+        },
+        'serializers': {
+            'handlers': ['console', 'file_info', 'file_error'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'tasks': {
+            'handlers': ['console', 'file_info', 'file_error'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'channels': {
+            'handlers': ['console', 'file_info', 'file_error'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'utils': {
+            'handlers': ['console', 'file_info', 'file_error'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}
+
 
 TIME_ZONE = 'UTC'
 

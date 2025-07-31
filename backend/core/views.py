@@ -1,33 +1,37 @@
-import os
 import json
-from rest_framework.status import HTTP_400_BAD_REQUEST
-from rest_framework.views import APIView
+import os
+
+from django.db.models import Count, F
+from django.conf import settings
+from django.contrib.auth import get_user_model
+from django_filters.rest_framework import DjangoFilterBackend
 from google.auth.transport import requests as google_requests
 from google.oauth2 import id_token
-from django.conf import settings
-
-from rest_framework import pagination, viewsets
+from rest_framework import viewsets
 from rest_framework.decorators import action
+from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.response import Response
-from django.contrib.auth import get_user_model
+from rest_framework.status import HTTP_400_BAD_REQUEST
+from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
-
-from .models import JobOffer, UserSkill, Skill
-from .serializers import JobOfferSerializer, UserSkillSerializer, SkillSerializer
 from .filter import JobOfferFilter
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.filters import SearchFilter, OrderingFilter
+from .models import JobOffer, Skill, UserSkill
+from .serializers import (JobOfferSerializer,
+                          JobOfferTestSerializer,
+                          SkillSerializer,
+                          UserSkillSerializer,
+                          UserSkillStatSerializer)
+from .paginations import StandardPagination
 
 
-class StandardPagination(pagination.PageNumberPagination):
-    page_size = 10
-    page_size_query_param = 'page_size'
-    max_page_size = 50
-
-
-class JobOfferViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = JobOffer.objects.all().order_by('-created_at')
+class JobOfferViewSet(viewsets.ModelViewSet):
+    """ViewSet for managing job offers.
+    It provides CRUD operations for job offers.
+    It supports filtering, searching, and ordering.
+    """
+    queryset = JobOffer.objects.select_related('user').order_by('-created_at')
     serializer_class = JobOfferSerializer
+    http_method_names = ['get', 'post', 'patch', 'delete', 'head', 'options']
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = JobOfferFilter
     pagination_class = StandardPagination
@@ -44,10 +48,24 @@ class JobOfferViewSet(viewsets.ReadOnlyModelViewSet):
         return Response(serializer.errors, status=400)
 
 
+class JobOfferTestViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = JobOfferTestSerializer
+    http_method_names = ['get', 'post', 'patch', 'delete', 'head', 'options']
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    pagination_class = StandardPagination
+
+    def get_queryset(self):
+        queryset = JobOffer.objects.select_related(
+            'user').order_by('-created_at')
+        print(queryset.explain())
+        return queryset
+
+
 class SkillViewSet(viewsets.ModelViewSet):
     queryset = Skill.objects.all()
     serializer_class = SkillSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    http_method_names = ['get', 'post', 'patch', 'delete', 'head', 'options']
     filterset_fields = ['name']
     search_fields = ['name']
     ordering_fields = ['name']
@@ -59,7 +77,9 @@ class SkillViewSet(viewsets.ModelViewSet):
 
 
 class UserSkillViewSet(viewsets.ModelViewSet):
-    queryset = UserSkill.objects.all()
+    queryset = UserSkill.objects.select_related(
+        "user").prefetch_related("skills")
+    # queryset = UserSkill.objects.all()
     serializer_class = UserSkillSerializer
     http_method_names = ['get', 'post', 'patch', 'delete', 'head', 'options']
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
@@ -70,6 +90,23 @@ class UserSkillViewSet(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+class UserSkillStatViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = UserSkillStatSerializer
+    http_method_names = ['get', 'head', 'options']
+    pagination_class = None
+
+    def get_queryset(self):
+        queryset = (UserSkill.objects.select_related("user")
+                    .annotate(num_skills=Count("skills"))
+                    .values(username=F("user__username"), num_skills=F("num_skills")))
+        return queryset
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -89,12 +126,12 @@ class GoogleAuthView(APIView):
         try:
             idinfo = id_token.verify_oauth2_token(
                 token, google_requests.Request(), settings.IOS_GOOGLE_CLIENT_ID)
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-except
             return Response({"error": f"Invalid token: {e}"}, status=HTTP_400_BAD_REQUEST)
 
         email = idinfo.get("email")
-        first_name = idinfo.get("given_name", "")
-        last_name = idinfo.get("family_name", "")
+        # first_name = idinfo.get("given_name", "")
+        # last_name = idinfo.get("family_name", "")
 
         # Store credentials per user (by email)
         if email:

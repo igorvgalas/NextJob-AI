@@ -10,10 +10,9 @@ import {
 } from "@gluestack-ui/themed";
 import { JobType } from "../types/JobType";
 import { ArrowLeft, MapPin } from "lucide-react-native";
-import { Pressable } from "react-native";
+import { Pressable, ScrollView } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Linking } from "react-native";
-import AppLayout from "../layouts/AppLayout";
 
 export default function JobDetailsScreen() {
   const navigation = useNavigation();
@@ -21,27 +20,30 @@ export default function JobDetailsScreen() {
   const { job } = route.params as { job: JobType };
 
   return (
-    <AppLayout>
       <Box flex={1} bg="$black" px="$5" pt="$12">
         <Pressable onPress={() => navigation.goBack()}>
-          <HStack alignItems="center" mt={4} mb="$4">
-            <Icon as={ArrowLeft} size="lg" color="$white" />
+          <HStack alignItems="center" pt="$4" mb="$4">
+            <Icon as={ArrowLeft} size="lg" color="$blue600" />
             <Text color="$white" fontSize="$md" ml="$2">
             Back
           </Text>
           </HStack>
         </Pressable>
-
-        <VStack space="md">
-          <HStack justifyContent="space-between" alignItems="center">
-            <Text
-              fontSize="$2xl"
-              fontWeight="$bold"
-              color="$white"
-              flexShrink={1}
-            >
-              {job.title}
-            </Text>
+        <ScrollView
+                  contentContainerStyle={{ flexGrow: 1 }}
+                  keyboardShouldPersistTaps="handled"
+                  style={{ backgroundColor: "transparent" }}
+                >
+                  <VStack space="md" pt="$4">
+                    <HStack justifyContent="space-between" alignItems="center">
+                      <Text
+                        fontSize="$2xl"
+                        fontWeight="$bold"
+                        color="$white"
+                        flexShrink={1}
+                      >
+                        {job.title}
+                      </Text>
             <Badge bg="$blue600" borderRadius="$full" px="$3" py="$1">
               <Text color="$white" fontSize="$xs" fontWeight="$bold">
                 Matching {Math.round(job.match_score * 10)}%
@@ -82,7 +84,7 @@ export default function JobDetailsScreen() {
             </Text>
           </Button>
         </VStack>
+        </ScrollView>
       </Box>
-    </AppLayout>
   );
 }

@@ -1,0 +1,293 @@
+INFO 2025-07-23 08:50:44,162 autoreload 94331 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 08:53:00,363 autoreload 94331 8480775936 /Users/cheef/Documents/nextjob-ai/backend/config/settings.py changed, reloading.
+INFO 2025-07-23 08:53:00,553 autoreload 95309 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 08:53:26,440 autoreload 95309 8480775936 /Users/cheef/Documents/nextjob-ai/backend/config/settings.py changed, reloading.
+INFO 2025-07-23 08:53:26,643 autoreload 95513 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 08:54:00,761 autoreload 95513 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 08:54:00,980 autoreload 95758 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 08:54:13,461 autoreload 95758 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/serializers.py changed, reloading.
+INFO 2025-07-23 08:54:13,646 autoreload 95879 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 08:56:31,961 autoreload 95879 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/serializers.py changed, reloading.
+INFO 2025-07-23 08:56:32,175 autoreload 96893 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 08:59:07,991 autoreload 96893 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 08:59:08,214 autoreload 98031 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 08:59:11,413 autoreload 98031 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 08:59:11,634 autoreload 98050 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:00:49,572 autoreload 98050 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 09:00:49,772 autoreload 98776 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:00:52,957 autoreload 98776 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 09:00:53,142 autoreload 98814 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:00:56,284 autoreload 98814 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 09:00:56,478 autoreload 98849 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:01:56,406 autoreload 98849 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 09:01:56,605 autoreload 99277 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:01:57,783 autoreload 99277 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 09:01:57,965 autoreload 99294 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:02:00,147 autoreload 99294 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 09:02:00,355 autoreload 99313 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:03:16,834 autoreload 99313 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 09:03:17,052 autoreload 99875 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:03:18,213 autoreload 99875 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 09:03:18,427 autoreload 99892 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:07:27,102 autoreload 99892 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/serializers.py changed, reloading.
+INFO 2025-07-23 09:07:27,309 autoreload 2289 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:07:32,563 autoreload 2289 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/serializers.py changed, reloading.
+INFO 2025-07-23 09:07:32,754 autoreload 2340 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:08:44,972 autoreload 2340 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 09:08:45,160 autoreload 2880 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:08:48,392 autoreload 2880 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 09:08:48,609 autoreload 2916 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:08:50,701 autoreload 2916 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 09:08:50,868 autoreload 2931 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:08:52,983 autoreload 2931 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 09:08:53,193 autoreload 2952 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:09:04,576 autoreload 2952 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 09:09:04,754 autoreload 3051 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:09:06,849 autoreload 3051 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 09:09:07,043 autoreload 3068 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:09:10,151 autoreload 3068 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 09:09:10,335 autoreload 3101 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:09:11,414 autoreload 3101 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 09:09:11,591 autoreload 3105 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:09:34,228 autoreload 3105 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 09:09:34,418 autoreload 3292 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:10:35,286 autoreload 3292 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 09:10:35,477 autoreload 3734 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:10:36,642 autoreload 3734 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 09:10:36,855 autoreload 3738 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:10:38,015 autoreload 3738 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 09:10:38,237 autoreload 3753 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:11:18,540 autoreload 3753 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 09:11:18,725 autoreload 4067 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:11:19,804 autoreload 4067 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 09:11:19,976 autoreload 4084 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:11:21,055 autoreload 4084 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 09:11:21,269 autoreload 4085 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:11:24,396 autoreload 4085 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 09:11:24,588 autoreload 4118 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:11:29,770 autoreload 4118 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 09:11:29,951 autoreload 4156 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:11:37,287 autoreload 4156 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 09:11:37,521 autoreload 4220 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:11:39,633 autoreload 4220 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 09:11:39,808 autoreload 4241 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:11:41,989 autoreload 4241 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 09:11:42,183 autoreload 4256 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:11:46,423 autoreload 4256 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 09:11:46,638 autoreload 4305 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:12:48,607 autoreload 4305 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 09:12:48,814 autoreload 4747 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:13:23,814 autoreload 4747 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 09:13:24,009 autoreload 5017 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:13:28,170 autoreload 5017 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 09:13:28,359 autoreload 5052 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:13:35,686 autoreload 5052 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 09:13:35,889 autoreload 5106 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:13:51,427 autoreload 5106 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 09:13:51,643 autoreload 5235 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:13:59,926 autoreload 5235 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 09:14:00,108 autoreload 5304 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:14:04,255 autoreload 5304 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 09:14:04,438 autoreload 5340 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:14:18,962 autoreload 5340 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 09:14:19,164 autoreload 5463 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:17:00,959 autoreload 6664 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:17:30,902 autoreload 6664 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 09:17:31,091 autoreload 6890 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:17:34,215 autoreload 6890 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 09:17:34,420 autoreload 6926 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:17:35,543 autoreload 6926 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 09:17:35,747 autoreload 6941 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:17:49,088 autoreload 6941 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 09:17:49,277 autoreload 7037 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:18:01,743 autoreload 7037 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/urls.py changed, reloading.
+INFO 2025-07-23 09:18:01,921 autoreload 7142 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:18:06,159 autoreload 7142 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/urls.py changed, reloading.
+INFO 2025-07-23 09:18:06,378 autoreload 7188 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:18:08,577 autoreload 7188 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/urls.py changed, reloading.
+INFO 2025-07-23 09:18:08,768 autoreload 7209 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:18:10,948 autoreload 7209 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/urls.py changed, reloading.
+INFO 2025-07-23 09:18:11,154 autoreload 7224 8480775936 Watching for file changes with StatReloader
+ERROR 2025-07-23 09:18:18,153 log 7224 6128496640 Internal Server Error: /api/userskillstats/
+Traceback (most recent call last):
+  File "/Users/cheef/.local/share/virtualenvs/nextjob-ai-ziJIAX1K/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/cheef/.local/share/virtualenvs/nextjob-ai-ziJIAX1K/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/cheef/.local/share/virtualenvs/nextjob-ai-ziJIAX1K/lib/python3.13/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/Users/cheef/.local/share/virtualenvs/nextjob-ai-ziJIAX1K/lib/python3.13/site-packages/rest_framework/viewsets.py", line 125, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/cheef/.local/share/virtualenvs/nextjob-ai-ziJIAX1K/lib/python3.13/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/cheef/.local/share/virtualenvs/nextjob-ai-ziJIAX1K/lib/python3.13/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/Users/cheef/.local/share/virtualenvs/nextjob-ai-ziJIAX1K/lib/python3.13/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/Users/cheef/.local/share/virtualenvs/nextjob-ai-ziJIAX1K/lib/python3.13/site-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/cheef/Documents/nextjob-ai/backend/core/views.py", line 96, in list
+    queryset = self.get_queryset()
+  File "/Users/cheef/Documents/nextjob-ai/backend/core/views.py", line 92, in get_queryset
+    .values(user=models.F("user__username"), num_skills=models.F("num_skills")))
+     ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/cheef/.local/share/virtualenvs/nextjob-ai-ziJIAX1K/lib/python3.13/site-packages/django/db/models/query.py", line 1368, in values
+    clone = self._values(*fields, **expressions)
+  File "/Users/cheef/.local/share/virtualenvs/nextjob-ai-ziJIAX1K/lib/python3.13/site-packages/django/db/models/query.py", line 1361, in _values
+    clone = clone.annotate(**expressions)
+  File "/Users/cheef/.local/share/virtualenvs/nextjob-ai-ziJIAX1K/lib/python3.13/site-packages/django/db/models/query.py", line 1649, in annotate
+    return self._annotate(args, kwargs, select=True)
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/cheef/.local/share/virtualenvs/nextjob-ai-ziJIAX1K/lib/python3.13/site-packages/django/db/models/query.py", line 1694, in _annotate
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: The annotation 'user' conflicts with a field on the model.
+INFO 2025-07-23 09:20:02,678 autoreload 7224 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 09:20:02,889 autoreload 8031 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:20:06,113 autoreload 8031 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 09:20:06,350 autoreload 8068 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:20:11,636 autoreload 8068 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 09:20:11,883 autoreload 8104 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 09:20:15,074 autoreload 8104 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 09:20:15,267 autoreload 8139 8480775936 Watching for file changes with StatReloader
+ERROR 2025-07-23 09:20:18,550 log 8139 6163853312 Internal Server Error: /api/userskillstats/
+Traceback (most recent call last):
+  File "/Users/cheef/.local/share/virtualenvs/nextjob-ai-ziJIAX1K/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/cheef/.local/share/virtualenvs/nextjob-ai-ziJIAX1K/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/cheef/.local/share/virtualenvs/nextjob-ai-ziJIAX1K/lib/python3.13/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/Users/cheef/.local/share/virtualenvs/nextjob-ai-ziJIAX1K/lib/python3.13/site-packages/rest_framework/viewsets.py", line 125, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/cheef/.local/share/virtualenvs/nextjob-ai-ziJIAX1K/lib/python3.13/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/cheef/.local/share/virtualenvs/nextjob-ai-ziJIAX1K/lib/python3.13/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/Users/cheef/.local/share/virtualenvs/nextjob-ai-ziJIAX1K/lib/python3.13/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/Users/cheef/.local/share/virtualenvs/nextjob-ai-ziJIAX1K/lib/python3.13/site-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/cheef/Documents/nextjob-ai/backend/core/views.py", line 95, in list
+    queryset = self.get_queryset()
+  File "/Users/cheef/Documents/nextjob-ai/backend/core/views.py", line 91, in get_queryset
+    .values(user=F("user__username"), num_skills=F("num_skills")))
+     ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/cheef/.local/share/virtualenvs/nextjob-ai-ziJIAX1K/lib/python3.13/site-packages/django/db/models/query.py", line 1368, in values
+    clone = self._values(*fields, **expressions)
+  File "/Users/cheef/.local/share/virtualenvs/nextjob-ai-ziJIAX1K/lib/python3.13/site-packages/django/db/models/query.py", line 1361, in _values
+    clone = clone.annotate(**expressions)
+  File "/Users/cheef/.local/share/virtualenvs/nextjob-ai-ziJIAX1K/lib/python3.13/site-packages/django/db/models/query.py", line 1649, in annotate
+    return self._annotate(args, kwargs, select=True)
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/cheef/.local/share/virtualenvs/nextjob-ai-ziJIAX1K/lib/python3.13/site-packages/django/db/models/query.py", line 1694, in _annotate
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: The annotation 'user' conflicts with a field on the model.
+INFO 2025-07-23 09:21:40,989 autoreload 8139 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 09:21:41,184 autoreload 8759 8480775936 Watching for file changes with StatReloader
+ERROR 2025-07-23 09:21:44,217 log 8759 6201634816 Internal Server Error: /api/userskillstats/
+Traceback (most recent call last):
+  File "/Users/cheef/.local/share/virtualenvs/nextjob-ai-ziJIAX1K/lib/python3.13/site-packages/rest_framework/fields.py", line 437, in get_attribute
+    return get_attribute(instance, self.source_attrs)
+  File "/Users/cheef/.local/share/virtualenvs/nextjob-ai-ziJIAX1K/lib/python3.13/site-packages/rest_framework/fields.py", line 102, in get_attribute
+    instance = instance[attr]
+               ~~~~~~~~^^^^^^
+KeyError: 'user'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/cheef/.local/share/virtualenvs/nextjob-ai-ziJIAX1K/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/cheef/.local/share/virtualenvs/nextjob-ai-ziJIAX1K/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/cheef/.local/share/virtualenvs/nextjob-ai-ziJIAX1K/lib/python3.13/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/Users/cheef/.local/share/virtualenvs/nextjob-ai-ziJIAX1K/lib/python3.13/site-packages/rest_framework/viewsets.py", line 125, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/cheef/.local/share/virtualenvs/nextjob-ai-ziJIAX1K/lib/python3.13/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/cheef/.local/share/virtualenvs/nextjob-ai-ziJIAX1K/lib/python3.13/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/Users/cheef/.local/share/virtualenvs/nextjob-ai-ziJIAX1K/lib/python3.13/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/Users/cheef/.local/share/virtualenvs/nextjob-ai-ziJIAX1K/lib/python3.13/site-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/cheef/Documents/nextjob-ai/backend/core/views.py", line 97, in list
+    return Response(serializer.data)
+                    ^^^^^^^^^^^^^^^
+  File "/Users/cheef/.local/share/virtualenvs/nextjob-ai-ziJIAX1K/lib/python3.13/site-packages/rest_framework/serializers.py", line 797, in data
+    ret = super().data
+          ^^^^^^^^^^^^
+  File "/Users/cheef/.local/share/virtualenvs/nextjob-ai-ziJIAX1K/lib/python3.13/site-packages/rest_framework/serializers.py", line 251, in data
+    self._data = self.to_representation(self.instance)
+                 ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/Users/cheef/.local/share/virtualenvs/nextjob-ai-ziJIAX1K/lib/python3.13/site-packages/rest_framework/serializers.py", line 716, in to_representation
+    self.child.to_representation(item) for item in iterable
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Users/cheef/.local/share/virtualenvs/nextjob-ai-ziJIAX1K/lib/python3.13/site-packages/rest_framework/serializers.py", line 527, in to_representation
+    attribute = field.get_attribute(instance)
+  File "/Users/cheef/.local/share/virtualenvs/nextjob-ai-ziJIAX1K/lib/python3.13/site-packages/rest_framework/fields.py", line 470, in get_attribute
+    raise type(exc)(msg)
+KeyError: "Got KeyError when attempting to get a value for field `user` on serializer `UserSkillStatSerializer`.\nThe serializer field might be named incorrectly and not match any attribute or key on the `dict` instance.\nOriginal exception text was: 'user'."
+INFO 2025-07-23 09:22:01,897 autoreload 8759 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/serializers.py changed, reloading.
+INFO 2025-07-23 09:22:02,098 autoreload 8935 8480775936 Watching for file changes with StatReloader
+WARNING 2025-07-23 09:23:51,741 log 8935 6192082944 Not Found: /
+WARNING 2025-07-23 09:24:04,768 log 8935 6192082944 Unauthorized: /auth/users/
+WARNING 2025-07-23 09:24:22,444 log 8935 6192082944 Unauthorized: /auth/users/me/
+WARNING 2025-07-23 09:27:18,264 log 8935 6276214784 Not Found: /
+INFO 2025-07-23 13:02:21,094 autoreload 8935 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/serializers.py changed, reloading.
+INFO 2025-07-23 13:02:21,583 autoreload 3390 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 13:02:26,042 autoreload 3390 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/serializers.py changed, reloading.
+INFO 2025-07-23 13:02:26,258 autoreload 3427 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 13:02:32,479 autoreload 3427 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/serializers.py changed, reloading.
+INFO 2025-07-23 13:02:32,689 autoreload 3479 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 13:03:48,945 autoreload 3479 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 13:03:49,151 autoreload 4055 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 13:03:52,390 autoreload 4055 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 13:03:52,594 autoreload 4090 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 13:03:55,708 autoreload 4090 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 13:03:55,890 autoreload 4111 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 13:04:30,963 autoreload 4111 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 13:04:31,167 autoreload 4390 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 13:04:44,637 autoreload 4390 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 13:04:44,845 autoreload 4488 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 13:04:48,997 autoreload 4488 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 13:04:49,201 autoreload 4523 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 13:04:53,423 autoreload 4523 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 13:04:53,620 autoreload 4572 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 13:04:56,826 autoreload 4572 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 13:04:57,021 autoreload 4593 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 13:04:58,183 autoreload 4593 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 13:04:58,375 autoreload 4609 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 13:05:00,543 autoreload 4609 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 13:05:00,752 autoreload 4625 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 13:08:50,941 autoreload 4625 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 13:08:51,072 autoreload 6282 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 13:08:56,391 autoreload 6282 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 13:08:56,621 autoreload 6332 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 13:08:57,796 autoreload 6332 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 13:08:57,991 autoreload 6349 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 13:09:01,187 autoreload 6349 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 13:09:01,372 autoreload 6370 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 13:09:03,549 autoreload 6370 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 13:09:03,748 autoreload 6402 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 13:09:04,919 autoreload 6402 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 13:09:05,136 autoreload 6407 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 13:09:06,211 autoreload 6407 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 13:09:06,397 autoreload 6422 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 13:09:08,567 autoreload 6422 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 13:09:08,787 autoreload 6440 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 13:09:09,953 autoreload 6440 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 13:09:10,156 autoreload 6459 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-23 13:29:51,964 autoreload 6459 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
+INFO 2025-07-23 13:29:52,266 autoreload 15265 8480775936 Watching for file changes with StatReloader

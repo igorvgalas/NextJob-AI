@@ -1,10 +1,12 @@
 import React, { useState, useRef } from "react";
 import { FlatList } from "react-native";
-import { Box, Text } from "@gluestack-ui/themed";
+import { Box, Text, Pressable } from "@gluestack-ui/themed";
+import Swipeable from "react-native-gesture-handler/Swipeable";
+import { TrashIcon } from "lucide-react-native";
 import JobCard from "../components/JobCard";
 import AppLayout from "../layouts/AppLayout";
 import { useAuth } from "../context/AuthContext";
-import { queryApi } from "../api/api";
+import { queryApi, useApiMutation } from "../api/api";
 
 export default function HomeScreen() {
   const user = useAuth();
@@ -15,8 +17,19 @@ export default function HomeScreen() {
   const [error, setError] = useState<string | null>(null);
   const isMounted = useRef(false);
 
+  const mutation = useApiMutation<any, any>(
+    (jobId: number) => ({
+      url: `/api/jobs/${jobId}/`,
+      options: {
+        method: "DELETE",
+      },
+    }),
+    undefined,
+    ["jobs", user.id]
+  );
+
   // Fetch jobs page
-  const fetchJobs = async (url: string) => {
+  const fetchJobs = async (url: string, replace = false) => {
     setLoadingMore(true);
     setError(null);
     try {
@@ -27,7 +40,11 @@ export default function HomeScreen() {
         },
         new Headers()
       );
-      setJobs((prev) => [...prev, ...data.results]);
+      if (replace) {
+        setJobs(data.results);
+      } else {
+        setJobs((prev) => [...prev, ...data.results]);
+      }
       setNextUrl(
         data.next ? data.next.replace(/^http(s)?:\/\/[^/]+/, "") : null
       );
@@ -42,7 +59,7 @@ export default function HomeScreen() {
   // Initial load
   React.useEffect(() => {
     if (!isMounted.current) {
-      fetchJobs("/api/jobs/?page=1&user=" + user.id);
+      fetchJobs(`/api/jobs/?page=1&user=${user.id}`, true);
       isMounted.current = true;
     }
   }, []);
@@ -51,6 +68,18 @@ export default function HomeScreen() {
     if (nextUrl && !loadingMore) {
       fetchJobs(nextUrl);
     }
+  };
+
+  const handleDeleteUI = (jobId: number) => {
+    mutation.mutate(jobId, {
+      onSuccess: () => {
+        setJobs((prev) => prev.filter((job) => job.id !== jobId));
+        fetchJobs(`/api/jobs/?page=1&user=${user.id}`, true);
+      },
+      onError: (error) => {
+        console.error("Error deleting job:", error);
+      },
+    });
   };
 
   if (initialLoading) {
@@ -102,7 +131,27 @@ export default function HomeScreen() {
         data={jobs}
         keyExtractor={(item) => item.id.toString()}
         showsVerticalScrollIndicator={false}
-        renderItem={({ item }) => <JobCard job={item} />}
+        renderItem={({ item }) => (
+          <Swipeable
+            renderRightActions={() => (
+              <Box
+                mt={2}
+                justifyContent="center"
+                alignItems="center"
+                width={80}
+                bg="$red600"
+                height="85%"
+                borderRadius={8}
+              >
+                <Pressable onPress={() => handleDeleteUI(item.id)}>
+                  <TrashIcon color="white" size={28} />
+                </Pressable>
+              </Box>
+            )}
+          >
+            <JobCard job={item} />
+          </Swipeable>
+        )}
         onEndReached={handleEndReached}
         onEndReachedThreshold={0.5}
         ListFooterComponent={
