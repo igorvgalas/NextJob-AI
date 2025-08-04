@@ -291,3 +291,56 @@ INFO 2025-07-23 13:09:09,953 autoreload 6440 8480775936 /Users/cheef/Documents/n
 INFO 2025-07-23 13:09:10,156 autoreload 6459 8480775936 Watching for file changes with StatReloader
 INFO 2025-07-23 13:29:51,964 autoreload 6459 8480775936 /Users/cheef/Documents/nextjob-ai/backend/core/views.py changed, reloading.
 INFO 2025-07-23 13:29:52,266 autoreload 15265 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-31 13:10:30,714 autoreload 43969 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-31 13:11:17,896 autoreload 44192 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-31 13:13:10,670 autoreload 45023 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-31 13:14:35,230 autoreload 45023 8480775936 /Users/cheef/Documents/nextjob-ai/backend/config/settings.py changed, reloading.
+INFO 2025-07-31 13:14:35,548 autoreload 45344 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-31 13:24:10,066 autoreload 48063 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-31 13:25:30,390 autoreload 48063 8480775936 /Users/cheef/Documents/nextjob-ai/backend/config/settings.py changed, reloading.
+INFO 2025-07-31 13:25:30,699 autoreload 48369 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-31 13:40:02,684 autoreload 52509 8480775936 Watching for file changes with StatReloader
+ERROR 2025-07-31 13:41:12,834 log 52509 6200520704 Invalid HTTP_HOST header: '127.0.0.1:8000'. You may need to add '127.0.0.1' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/Users/cheef/.local/share/virtualenvs/nextjob-ai-ziJIAX1K/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/cheef/.local/share/virtualenvs/nextjob-ai-ziJIAX1K/lib/python3.13/site-packages/django/utils/deprecation.py", line 119, in __call__
+    response = self.process_request(request)
+  File "/Users/cheef/.local/share/virtualenvs/nextjob-ai-ziJIAX1K/lib/python3.13/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+  File "/Users/cheef/.local/share/virtualenvs/nextjob-ai-ziJIAX1K/lib/python3.13/site-packages/django/http/request.py", line 202, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '127.0.0.1:8000'. You may need to add '127.0.0.1' to ALLOWED_HOSTS.
+ERROR 2025-07-31 13:41:12,926 log 52509 6217347072 Invalid HTTP_HOST header: '127.0.0.1:8000'. You may need to add '127.0.0.1' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/Users/cheef/.local/share/virtualenvs/nextjob-ai-ziJIAX1K/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/cheef/.local/share/virtualenvs/nextjob-ai-ziJIAX1K/lib/python3.13/site-packages/django/utils/deprecation.py", line 119, in __call__
+    response = self.process_request(request)
+  File "/Users/cheef/.local/share/virtualenvs/nextjob-ai-ziJIAX1K/lib/python3.13/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+  File "/Users/cheef/.local/share/virtualenvs/nextjob-ai-ziJIAX1K/lib/python3.13/site-packages/django/http/request.py", line 202, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '127.0.0.1:8000'. You may need to add '127.0.0.1' to ALLOWED_HOSTS.
+INFO 2025-07-31 13:42:00,650 autoreload 53342 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-31 13:44:42,688 autoreload 53993 8480775936 Watching for file changes with StatReloader
+WARNING 2025-07-31 13:45:47,397 log 53993 6199603200 Not Found: /
+WARNING 2025-07-31 13:45:47,486 log 53993 6199603200 Not Found: /favicon.ico
+INFO 2025-07-31 13:54:55,893 autoreload 57126 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-31 13:56:35,234 autoreload 57537 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-31 14:04:31,324 autoreload 59796 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-31 14:07:39,802 autoreload 60517 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-31 14:08:23,236 autoreload 60517 8480775936 /Users/cheef/Documents/nextjob-ai/backend/config/settings.py changed, reloading.
+INFO 2025-07-31 14:08:23,450 autoreload 60688 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-31 14:08:26,651 autoreload 60688 8480775936 /Users/cheef/Documents/nextjob-ai/backend/config/settings.py changed, reloading.
+INFO 2025-07-31 14:09:18,332 autoreload 60970 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-31 14:10:08,780 autoreload 61561 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-31 14:14:05,884 autoreload 62576 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-31 14:34:52,879 autoreload 67995 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-31 14:38:54,375 autoreload 68998 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-31 14:40:19,736 autoreload 68998 8480775936 /Users/cheef/Documents/nextjob-ai/backend/config/settings.py changed, reloading.
+INFO 2025-07-31 14:40:19,994 autoreload 70307 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-31 14:45:53,310 autoreload 73234 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-31 14:54:08,074 autoreload 77871 8480775936 Watching for file changes with StatReloader
+INFO 2025-07-31 14:58:38,304 autoreload 79888 8480775936 Watching for file changes with StatReloader
+WARNING 2025-07-31 14:58:42,728 log 79888 6132346880 Not Found: /

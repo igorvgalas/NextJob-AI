@@ -34,7 +34,7 @@ async function queryApi<ApiResult>(
   const token = await AsyncStorage.getItem('token');
   headers.set('Content-Type', 'application/json');
   if (token) {
-    headers.set('Authorization', `JWT ${token}`);
+    headers.set('Authorization', `Bearer ${token}`);
   }
 
   const response = await fetch(fetchurl + fetchArgs.url, {
@@ -48,7 +48,7 @@ async function queryApi<ApiResult>(
     if (newToken) {
       const retryHeaders = new Headers();
       retryHeaders.set('Content-Type', 'application/json');
-      retryHeaders.set('Authorization', `JWT ${newToken}`);
+      retryHeaders.set('Authorization', `Bearer ${newToken}`);
 
       const retryResponse = await fetch(fetchurl + fetchArgs.url, {
         ...fetchArgs.options,

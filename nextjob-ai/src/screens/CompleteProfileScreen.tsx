@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Formik } from "formik";
 import {
   VStack,
@@ -13,19 +13,30 @@ import { Alert } from "react-native";
 import { useApiMutation } from "../api/api";
 import AuthLayout from "../layouts/AuthLayout";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function CompleteProfileScreen({ navigation, route }) {
   const { user } = route.params || {};
-  const token = AsyncStorage.getItem("token");
+  const [token, setToken] = useState<string | null>(null);
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    AsyncStorage.getItem("token").then((t) => {
+      setToken(t);
+    });
+  }, []);
+
   const updateProfile = useApiMutation<any, any>((values) => ({
-    url: `/auth/users/me/`,
+    url: `/users/me`,
     options: {
-      method: "PUT",
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `JWT ${token}`,
+        Authorization: `Bearer ${token}`,
       },
-      body: values,
+      body: {
+        ...values,
+      },
     },
   }));
 
@@ -55,6 +66,9 @@ export default function CompleteProfileScreen({ navigation, route }) {
         onSubmit={async (values) => {
           try {
             await updateProfile.mutateAsync(values);
+
+            await queryClient.invalidateQueries({ queryKey: ["auth"] });
+
             Alert.alert("Profile updated!", "You can now use your account.");
             navigation.reset({ index: 0, routes: [{ name: "Home" }] });
           } catch (error: any) {

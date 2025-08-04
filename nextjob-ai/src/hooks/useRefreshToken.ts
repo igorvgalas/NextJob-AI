@@ -6,7 +6,7 @@ export async function refreshToken(): Promise<string | null> {
 
   if (!refresh) return null;
 
-  const response = await fetch(`${Constants.expoConfig.extra.BASE_URL}/auth/jwt/refresh/`, {
+  const response = await fetch(`${Constants.expoConfig.extra.BASE_URL}/auth/refresh`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

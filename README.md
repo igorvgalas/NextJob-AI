@@ -16,13 +16,13 @@ NextJob AI is an intelligent platform designed to streamline job searching and r
 
 ## Tech Stack
 
-- **Backend:** Django, Django REST Framework
+- **Backend:** FastApi
 - **Frontend:** React Native (Expo)
 - **Microservices:** Python
-- **Database:** Sqlite3
+- **Database:** PostgreSql
 - **AI Integration:** OpenAI API
 - **DevOps:** Docker, GitHub Actions
-- **Python Environment:** Pipenv
+- **Python Environment:** venv
 
 ---
 
@@ -42,9 +42,7 @@ cd backend
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
-cp .env.example .env  # Add your environment variables
-python manage.py migrate
-python manage.py runserver
+uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
 
 ### 3. Mobile App Setup

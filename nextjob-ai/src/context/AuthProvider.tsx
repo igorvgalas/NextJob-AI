@@ -24,14 +24,14 @@ export default function AuthProvider({
     })();
   }, []);
 
-  const { data, isFetching } = useApi<AuthResource>(
+  const { data: user, isFetching } = useApi<AuthResource>(
     {
-      url: "/auth/users/me/",
+      url: "/users/me",
       options: {},
     },
     {
       meta: {
-        authorization: `JWT ${token}`,
+        authorization: `Bearer ${token}`,
       },
       enabled: loaded && !!token,
       queryKey: ["auth"],
@@ -39,8 +39,7 @@ export default function AuthProvider({
   );
 
   useEffect(() => {
-    if (loaded && token && !isFetching && !data) {
-      // Користувача не знайдено — видаляємо токени
+    if (loaded && token && !isFetching && !user) {
       AsyncStorage.multiRemove(["token", "refreshToken"]);
       setToken(null);
     }
@@ -61,7 +60,7 @@ export default function AuthProvider({
 
   return (
     <AuthTokenContext.Provider value={{ setToken }}>
-      <ContextProvider value={data ?? null}>
+      <ContextProvider value={user ?? null}>
         {children}
       </ContextProvider>
     </AuthTokenContext.Provider>

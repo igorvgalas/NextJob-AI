@@ -1,0 +1,360 @@
+{
+  "skills": [
+    {
+      "id": 1,
+      "name": "Python"
+    },
+    {
+      "id": 2,
+      "name": "JavaScript"
+    },
+    {
+      "id": 3,
+      "name": "TypeScript"
+    },
+    {
+      "id": 4,
+      "name": "Java"
+    },
+    {
+      "id": 5,
+      "name": "C#"
+    },
+    {
+      "id": 6,
+      "name": "C++"
+    },
+    {
+      "id": 7,
+      "name": "Go"
+    },
+    {
+      "id": 8,
+      "name": "Ruby"
+    },
+    {
+      "id": 9,
+      "name": "PHP"
+    },
+    {
+      "id": 10,
+      "name": "Swift"
+    },
+    {
+      "id": 11,
+      "name": "Kotlin"
+    },
+    {
+      "id": 12,
+      "name": "Rust"
+    },
+    {
+      "id": 13,
+      "name": "Scala"
+    },
+    {
+      "id": 14,
+      "name": "R"
+    },
+    {
+      "id": 15,
+      "name": "MATLAB"
+    },
+    {
+      "id": 16,
+      "name": "React"
+    },
+    {
+      "id": 17,
+      "name": "Angular"
+    },
+    {
+      "id": 18,
+      "name": "Vue.js"
+    },
+    {
+      "id": 19,
+      "name": "Svelte"
+    },
+    {
+      "id": 20,
+      "name": "HTML"
+    },
+    {
+      "id": 21,
+      "name": "CSS"
+    },
+    {
+      "id": 22,
+      "name": "Sass"
+    },
+    {
+      "id": 23,
+      "name": "Bootstrap"
+    },
+    {
+      "id": 24,
+      "name": "Tailwind CSS"
+    },
+    {
+      "id": 25,
+      "name": "Next.js"
+    },
+    {
+      "id": 26,
+      "name": "Redux"
+    },
+    {
+      "id": 27,
+      "name": "Node.js"
+    },
+    {
+      "id": 28,
+      "name": "Express.js"
+    },
+    {
+      "id": 29,
+      "name": "Django"
+    },
+    {
+      "id": 30,
+      "name": "Flask"
+    },
+    {
+      "id": 31,
+      "name": "FastAPI"
+    },
+    {
+      "id": 32,
+      "name": "Spring Boot"
+    },
+    {
+      "id": 33,
+      "name": ".NET Core"
+    },
+    {
+      "id": 34,
+      "name": "Ruby on Rails"
+    },
+    {
+      "id": 35,
+      "name": "Laravel"
+    },
+    {
+      "id": 36,
+      "name": "Koa.js"
+    },
+    {
+      "id": 37,
+      "name": "PostgreSQL"
+    },
+    {
+      "id": 38,
+      "name": "MySQL"
+    },
+    {
+      "id": 39,
+      "name": "SQLite"
+    },
+    {
+      "id": 40,
+      "name": "MongoDB"
+    },
+    {
+      "id": 41,
+      "name": "Redis"
+    },
+    {
+      "id": 42,
+      "name": "Cassandra"
+    },
+    {
+      "id": 43,
+      "name": "DynamoDB"
+    },
+    {
+      "id": 44,
+      "name": "Oracle Database"
+    },
+    {
+      "id": 45,
+      "name": "Microsoft SQL Server"
+    },
+    {
+      "id": 46,
+      "name": "Docker"
+    },
+    {
+      "id": 47,
+      "name": "Kubernetes"
+    },
+    {
+      "id": 48,
+      "name": "AWS"
+    },
+    {
+      "id": 49,
+      "name": "Azure"
+    },
+    {
+      "id": 50,
+      "name": "Google Cloud Platform"
+    },
+    {
+      "id": 51,
+      "name": "Jenkins"
+    },
+    {
+      "id": 52,
+      "name": "GitHub Actions"
+    },
+    {
+      "id": 53,
+      "name": "GitLab CI/CD"
+    },
+    {
+      "id": 54,
+      "name": "Terraform"
+    },
+    {
+      "id": 55,
+      "name": "Ansible"
+    },
+    {
+      "id": 56,
+      "name": "CircleCI"
+    },
+    {
+      "id": 57,
+      "name": "Jest"
+    },
+    {
+      "id": 58,
+      "name": "Mocha"
+    },
+    {
+      "id": 59,
+      "name": "Jasmine"
+    },
+    {
+      "id": 60,
+      "name": "PyTest"
+    },
+    {
+      "id": 61,
+      "name": "Selenium"
+    },
+    {
+      "id": 62,
+      "name": "Cypress"
+    },
+    {
+      "id": 63,
+      "name": "JUnit"
+    },
+    {
+      "id": 64,
+      "name": "React Native"
+    },
+    {
+      "id": 65,
+      "name": "Flutter"
+    },
+    {
+      "id": 66,
+      "name": "SwiftUI"
+    },
+    {
+      "id": 67,
+      "name": "Android SDK"
+    },
+    {
+      "id": 68,
+      "name": "iOS SDK"
+    },
+    {
+      "id": 69,
+      "name": "Git"
+    },
+    {
+      "id": 70,
+      "name": "REST APIs"
+    },
+    {
+      "id": 71,
+      "name": "GraphQL"
+    },
+    {
+      "id": 72,
+      "name": "WebSockets"
+    },
+    {
+      "id": 73,
+      "name": "OAuth"
+    },
+    {
+      "id": 74,
+      "name": "JWT"
+    },
+    {
+      "id": 75,
+      "name": "Microservices"
+    },
+    {
+      "id": 76,
+      "name": "Agile/Scrum"
+    },
+    {
+      "id": 77,
+      "name": "Linux"
+    },
+    {
+      "id": 78,
+      "name": "Windows Server"
+    },
+    {
+      "id": 79,
+      "name": "Bash/Shell Scripting"
+    },
+    {
+      "id": 80,
+      "name": "Figma"
+    },
+    {
+      "id": 81,
+      "name": "UI/UX Design"
+    },
+    {
+      "id": 82,
+      "name": "Machine Learning"
+    },
+    {
+      "id": 83,
+      "name": "Data Analysis"
+    },
+    {
+      "id": 84,
+      "name": "Pandas"
+    },
+    {
+      "id": 85,
+      "name": "NumPy"
+    },
+    {
+      "id": 86,
+      "name": "TensorFlow"
+    },
+    {
+      "id": 87,
+      "name": "PyTorch"
+    },
+    {
+      "id": 88,
+      "name": "OpenCV"
+    },
+    {
+      "id": 89,
+      "name": "NLP"
+    }
+  ]
+}

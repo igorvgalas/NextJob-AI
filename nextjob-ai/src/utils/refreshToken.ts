@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Constants from 'expo-constants';
 
 let isRefreshing = false;
 let refreshQueue: Array<{
@@ -22,7 +23,7 @@ export const refreshToken = async (): Promise<string> => {
   }
 
   try {
-    const response = await fetch('http://YOUR_API_URL/auth/jwt/refresh/', {
+    const response = await fetch(`${Constants.expoConfig.extra.BASE_URL}/auth/refresh`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

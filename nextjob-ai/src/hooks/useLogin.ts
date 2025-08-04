@@ -17,10 +17,16 @@ export function useLogin() {
   
   return useApiMutation<LoginCredentials, LoginResponse>(
     (creds) => ({
-      url: "/auth/jwt/create/",
+      url: "/auth/jwt/login",
       options: {
         method: "POST",
-        body: creds,
+        body: new URLSearchParams({
+          username: creds.username,
+          password: creds.password,
+        }).toString(),
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
       },
     }),
     {

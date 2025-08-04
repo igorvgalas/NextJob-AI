@@ -53,7 +53,7 @@ export default function RegisterScreen() {
     RegisterResponse
   >(
     (creds) => ({
-      url: "/auth/users/",
+      url: "/auth/register",
       options: {
         method: "POST",
         body: creds,

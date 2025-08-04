@@ -67,7 +67,7 @@ export default function LoginScreen() {
     { id_token: string; accessToken?: string },
     GoogleAuthResponse
   >(({ id_token, accessToken }) => ({
-    url: "/oauth2callback/",
+    url: "/auth/google-login",
     options: {
       method: "POST",
       body: { id_token, accessToken },

@@ -8,13 +8,13 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import { useAuth } from "../context/AuthContext";
 
 type Skills = {
-  id: string;
+  id: number;
   name: string;
 };
 
 type UserSkills = {
-  id: string;
-  user: string;
+  id: number;
+  user_id: number;
   skills: Skills[];
 };
 
@@ -30,7 +30,7 @@ export default function SkillsScreen() {
   const user = useAuth();
   const { data: userSkills, isLoading: userSkillsLoading } = useApi<UserSkills>(
     {
-      url: `/api/userskills/?user=${user.id}`,
+      url: `/user_skills/user/${user.id}`,
       options: {},
     },
     {
@@ -38,24 +38,40 @@ export default function SkillsScreen() {
     }
   );
   // Defensive: ensure userSkills is always an array
-  const safeUserSkills = Array.isArray(userSkills) ? userSkills : [];
-  const userSkillId = safeUserSkills[0]?.id;
+  const safeUserSkills = Array.isArray(userSkills.skills) ? userSkills.skills : [];
+  console.log("Safe User Skills:", safeUserSkills);
+  const userSkillId = userSkills?.id;
+  console.log("User Skill ID:", userSkillId);
   const initialSkillIds =
-    safeUserSkills[0]?.skills?.map((skill) => skill.id) || [];
+    userSkills?.skills?.map((skill) => skill.id) || [];
 
   const { data: skills, isLoading } = useApi<Skills[]>(
     {
-      url: "/api/skills/",
+      url: "/skills",
       options: {},
     },
     {
       queryKey: ["userSkills", user.id],
     }
   );
+  const createMutation = useApiMutation<
+    UserSkillsPayload & { user_id: number },
+    any
+  >(
+    (data) => ({
+      url: `/user_skills`,
+      options: {
+        method: "POST",
+        body: data,
+      },
+    }),
+    undefined,
+    ["userSkills", user.id]
+  );
 
   const mutation = useApiMutation<UserSkillsPayload, any>(
     (data) => ({
-      url: `/api/userskills/${userSkillId || ""}/`,
+      url: `/user_skills/${userSkillId}`,
       options: {
         method: "PATCH",
         body: data,
@@ -71,8 +87,12 @@ export default function SkillsScreen() {
         enableReinitialize={true}
         initialValues={{ skills: initialSkillIds }}
         onSubmit={(values) => {
-          console.log("Submitted:", values.skills);
-          mutation.mutate({ skill_ids: values.skills });
+          const skillIds = values.skills;
+          if (userSkillId) {
+            mutation.mutate({ skill_ids: skillIds });
+          } else {
+            createMutation.mutate({ user_id: user.id, skill_ids: skillIds });
+          }
         }}
       >
         {({ values, setFieldValue, handleSubmit, dirty }) => (
