@@ -31,35 +31,39 @@ async function queryApi<ApiResult>(
   fetchArgs: FetchArgs,
   headers: Headers
 ): Promise<ApiResult> {
-  const token = await AsyncStorage.getItem('token');
+  let token = await AsyncStorage.getItem('token');
   headers.set('Content-Type', 'application/json');
   if (token) {
     headers.set('Authorization', `Bearer ${token}`);
   }
 
-  const response = await fetch(fetchurl + fetchArgs.url, {
+  let response = await fetch(fetchurl + fetchArgs.url, {
     ...fetchArgs.options,
     body: fetchArgs.options.body && JSON.stringify(fetchArgs.options.body),
     headers,
   });
 
-  if (response.status === 401) {
+  let retries = 0;
+  while (response.status === 401 && retries < 3) {
     const newToken = await refreshToken();
-    if (newToken) {
-      const retryHeaders = new Headers();
-      retryHeaders.set('Content-Type', 'application/json');
-      retryHeaders.set('Authorization', `Bearer ${newToken}`);
-
-      const retryResponse = await fetch(fetchurl + fetchArgs.url, {
-        ...fetchArgs.options,
-        body: fetchArgs.options.body && JSON.stringify(fetchArgs.options.body),
-        headers: retryHeaders,
-      });
-
-      if (!retryResponse.ok) throw new Error("Retry failed");
-      return retryResponse.json();
+    if (!newToken) {
+      await AsyncStorage.multiRemove(['token', 'refreshToken']);
+      break;
     }
-    throw new Error("Unauthorized and refresh failed");
+    token = newToken;
+    const retryHeaders = new Headers();
+    retryHeaders.set('Content-Type', 'application/json');
+    retryHeaders.set('Authorization', `Bearer ${newToken}`);
+    response = await fetch(fetchurl + fetchArgs.url, {
+      ...fetchArgs.options,
+      body: fetchArgs.options.body && JSON.stringify(fetchArgs.options.body),
+      headers: retryHeaders,
+    });
+    retries++;
+  }
+  if (response.status === 401) {
+    await AsyncStorage.multiRemove(['token', 'refreshToken']);
+    throw new Error('Unauthorized and refresh failed');
   }
 
   if (response.status === 204) {

@@ -3,10 +3,12 @@ import Constants from 'expo-constants';
 
 export async function refreshToken(): Promise<string | null> {
   const refresh = await AsyncStorage.getItem("refreshToken");
+  if (!refresh) {
+    await AsyncStorage.multiRemove(["token", "refreshToken"]);
+    return null;
+  }
 
-  if (!refresh) return null;
-
-  const response = await fetch(`${Constants.expoConfig.extra.BASE_URL}/auth/refresh`, {
+  const response = await fetch(`${Constants.expoConfig.extra.BASE_URL}/auth/jwt/refresh`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

@@ -15,22 +15,24 @@ import LoadingScreen from "./src/screens/LoadingScreen";
 import SkillsScreen from "./src/screens/SkillsScreen";
 import NotificationScreen from "./src/screens/NotificationScreen";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+global.AsyncStorage = AsyncStorage;
+
+// Uncomment the following lines to debug AsyncStorage contents
+// This will log all keys and their values in AsyncStorage to the console
+// Note: This can be useful for debugging but should be removed in production code.
+
+// AsyncStorage.getAllKeys().then(keys => {
+//   AsyncStorage.multiGet(keys).then(data => {
+//     console.log("AsyncStorage contents:", data);
+//   });
+// });
 
 const Stack = createNativeStackNavigator();
 
-export const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: (count, error: any) => {
-        // Only retry once on 401, but do not attempt async refresh here
-        if (error?.status === 401 && count === 1) {
-          return true;
-        }
-        return false;
-      },
-    },
-  },
-});
+export const queryClient = new QueryClient();
+
 
 export default function App() {
   const colorMode = useColorScheme();

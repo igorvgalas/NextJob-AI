@@ -1,8 +1,15 @@
+"""
+Database models for the FastAPI application.
+
+This module contains SQLAlchemy models for users, job offers, skills, and their relationships.
+"""
+from datetime import datetime
+
 from sqlalchemy import Column, String, Integer, Float, Text, ForeignKey, DateTime, Table, Boolean
 from sqlalchemy.orm import relationship
 from fastapi_users.db import SQLAlchemyBaseUserTable
-from datetime import datetime
-from app.database import Base 
+
+from app.database import Base
 
 user_skill_association = Table(
     'user_skill_association', Base.metadata,
@@ -12,11 +19,12 @@ user_skill_association = Table(
 
 
 class JobOffer(Base):
+    """Model representing a job offer."""
+
     __tablename__ = 'job_offers'
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey('users.id'), nullable=True)
-    # Add user relationship
     user = relationship("User", back_populates="job_offers")
     email = Column(String, nullable=True, default='')
     match_score = Column(Float, default=0.0)
@@ -30,30 +38,37 @@ class JobOffer(Base):
     created_at = Column(DateTime, default=datetime.utcnow, index=True)
 
     def __repr__(self):
+        """Return string representation of JobOffer."""
         return f"<JobOffer(title={self.title}, company={self.company})>"
 
 
 class Skill(Base):
+    """Model representing a skill."""
+
     __tablename__ = 'skills'
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(100), unique=True, nullable=False)
 
     def __repr__(self):
+        """Return string representation of Skill."""
         return f"<Skill(name={self.name})>"
 
 
 class UserSkill(Base):
+    """Model representing the relationship between users and skills."""
+
     __tablename__ = 'user_skills'
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey('users.id'))
-  
+
     user = relationship("User", back_populates="user_skills")
     skills = relationship(
         'Skill', secondary=user_skill_association, back_populates='user_skills', lazy="selectin")
 
     def get_skill_ids(self):
+        """Return list of skill IDs associated with this user skill."""
         return [skill.id for skill in self.skills]
 
 
@@ -62,8 +77,10 @@ Skill.user_skills = relationship(
 
 
 class User(SQLAlchemyBaseUserTable, Base):
+    """Model representing a user, extending FastAPI Users base table."""
+
     __tablename__ = "users"
-    id = Column(Integer, primary_key=True, index=True) 
+    id = Column(Integer, primary_key=True, index=True)
     username = Column(String, unique=True, nullable=True)
     first_name = Column(String, nullable=True)
     last_name = Column(String, nullable=True)

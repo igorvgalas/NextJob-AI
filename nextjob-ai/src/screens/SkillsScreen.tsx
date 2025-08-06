@@ -1,11 +1,12 @@
 import React from "react";
-import { VStack, Button, ButtonText } from "@gluestack-ui/themed";
+import { VStack, Button, ButtonText, Text } from "@gluestack-ui/themed";
 import AppLayout from "../layouts/AppLayout";
 import { useApi, useApiMutation } from "../api/api";
 import { Formik } from "formik";
 import SectionedMultiSelect from "react-native-sectioned-multi-select";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { useAuth } from "../context/AuthContext";
+import Loader from "../components/Loader";
 
 type Skills = {
   id: number;
@@ -28,32 +29,31 @@ type UserSkillsPayload = {
 
 export default function SkillsScreen() {
   const user = useAuth();
+
   const { data: userSkills, isLoading: userSkillsLoading } = useApi<UserSkills>(
     {
       url: `/user_skills/user/${user.id}`,
       options: {},
     },
     {
-      queryKey: ["userSkills"],
+      queryKey: ["userSkills", user.id],
+      enabled: !!user,
     }
   );
-  // Defensive: ensure userSkills is always an array
-  const safeUserSkills = Array.isArray(userSkills.skills) ? userSkills.skills : [];
-  console.log("Safe User Skills:", safeUserSkills);
-  const userSkillId = userSkills?.id;
-  console.log("User Skill ID:", userSkillId);
-  const initialSkillIds =
-    userSkills?.skills?.map((skill) => skill.id) || [];
-
-  const { data: skills, isLoading } = useApi<Skills[]>(
+  const {
+    data: skills,
+    isLoading,
+    error,
+  } = useApi<Skills[]>(
     {
       url: "/skills",
       options: {},
     },
     {
-      queryKey: ["userSkills", user.id],
+      queryKey: ["skills"],
     }
   );
+
   const createMutation = useApiMutation<
     UserSkillsPayload & { user_id: number },
     any
@@ -80,6 +80,28 @@ export default function SkillsScreen() {
     undefined,
     ["userSkills", user.id]
   );
+
+  if (!user || userSkillsLoading || isLoading) {
+    return <Loader />;
+  }
+  // Defensive: ensure userSkills is always an array
+  const safeUserSkills = Array.isArray(userSkills?.skills)
+    ? userSkills.skills
+    : [];
+  const userSkillId = userSkills?.id;
+  const initialSkillIds = safeUserSkills.map((skill) => skill.id) || [];
+
+  if (error) {
+    return (
+      <AppLayout>
+        <Text style={{ color: "red", marginBottom: 8 }}>
+          {typeof error === "string"
+            ? error
+            : "An error occurred while fetching skills."}
+        </Text>
+      </AppLayout>
+    );
+  }
 
   return (
     <AppLayout>

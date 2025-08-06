@@ -44,7 +44,7 @@ export default function LoginScreen() {
   const { setToken } = useAuthToken();
   const [showPassword, setShowPassword] = useState(false);
   const navigation = useNavigation();
-  const { mutate: login } = useLogin();
+  const login = useLogin();
   const iosClientId = Constants.expoConfig?.extra?.IOS_GOOGLE_CLIENT_ID;
 
   const [request, response, promptAsync] = Google.useAuthRequest(
@@ -131,30 +131,22 @@ export default function LoginScreen() {
       />
 
       <Formik
-        initialValues={{ username: "", password: "" }}
+        initialValues={{ email: "", password: "" }}
         onSubmit={(values) => {
-          login(values, {
-            onSuccess: () => navigation.navigate("Home" as never),
-            onError: (error: any) => {
-              Alert.alert(
-                "Login failed",
-                error?.message || "Check your credentials"
-              );
-            },
-          });
+          login(values);
         }}
       >
         {({ handleChange, handleSubmit, values }) => (
           <FormControl width="100%" px="$8">
             <VStack space="lg">
               <VStack space="xs">
-                <Text color="$coolGray300">Username</Text>
+                <Text color="$coolGray300">Email</Text>
                 <Input borderColor="$coolGray600">
                   <InputField
                     type="text"
-                    value={values.username}
-                    onChangeText={handleChange("username")}
-                    placeholder="Enter your username"
+                    value={values.email}
+                    onChangeText={handleChange("email")}
+                    placeholder="Enter your email"
                     color="$white"
                     placeholderTextColor="$coolGray400"
                   />
@@ -182,7 +174,7 @@ export default function LoginScreen() {
                 bg="$blue600"
                 borderRadius="$md"
                 onPress={handleSubmit as any}
-                isDisabled={!values.username || !values.password}
+                isDisabled={!values.email || !values.password}
               >
                 <ButtonText color="$white" fontWeight="$bold">
                   Log in

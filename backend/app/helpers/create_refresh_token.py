@@ -5,8 +5,7 @@ import os
 
 
 # Should match your secret and lifetime setup
-SECRET = os.getenv("SECRET", "CHANGE_THIS_SECRET")
-ACCESS_TOKEN_LIFETIME_MINUTES = os.getenv("ACCESS_TOKEN_LIFETIME_MINUTES", 15)
+SECRET = os.getenv("SECRET_KEY", "CHANGE_THIS_SECRET")
 REFRESH_TOKEN_LIFETIME_DAYS = os.getenv("REFRESH_TOKEN_LIFETIME_DAYS", 7)
 ALGORITHM = os.getenv("ALGORITHM", "HS256")
 

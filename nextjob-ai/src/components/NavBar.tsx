@@ -25,6 +25,10 @@ const NavBar: React.FC<NavBarProps> = ({ onLogout }) => {
           isOpen={menuOpen}
           placement="bottom right"
           onClose={() => setMenuOpen(false)}
+          backgroundColor="$black"
+          borderColor="$gray500"
+          borderWidth={1}
+          borderRadius="$md"
           trigger={(triggerProps) => (
             <Pressable
               {...triggerProps}

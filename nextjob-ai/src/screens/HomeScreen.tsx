@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { FlatList } from "react-native";
-import { Box, Text, Pressable } from "@gluestack-ui/themed";
+import { Box, Text, Pressable, Spinner } from "@gluestack-ui/themed";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 import { TrashIcon } from "lucide-react-native";
 import JobCard from "../components/JobCard";
@@ -8,6 +8,7 @@ import AppLayout from "../layouts/AppLayout";
 import { useAuth } from "../context/AuthContext";
 import { queryApi, useApiMutation } from "../api/api";
 import { useNavigation } from "@react-navigation/native";
+import Loader from "../components/Loader";
 
 export default function HomeScreen() {
   const user = useAuth();
@@ -18,7 +19,7 @@ export default function HomeScreen() {
   const [initialLoading, setInitialLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const isMounted = useRef(false);
-  console.log("User:", user);
+  // console.log("User:", user);
 
   useEffect(() => {
     if (!user) {
@@ -100,16 +101,7 @@ export default function HomeScreen() {
   };
 
   if (initialLoading) {
-    return (
-      <Box
-        flex={1}
-        justifyContent="center"
-        alignItems="center"
-        bg="$backgroundDark950"
-      >
-        <Text color="$textLight900">Loading jobs...</Text>
-      </Box>
-    );
+    return <Loader />;
   }
 
   if (error) {

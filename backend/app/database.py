@@ -1,8 +1,14 @@
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
-from typing import AsyncGenerator
-from dotenv import load_dotenv
-from urllib.parse import quote_plus
+"""
+Database configuration and session management for the FastAPI application.
+
+This module contains database connection setup and session management utilities.
+"""
 import os
+from typing import AsyncGenerator
+from urllib.parse import quote_plus
+
+from dotenv import load_dotenv
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 from sqlalchemy.orm import DeclarativeBase
 
 # Load environment variables
@@ -19,7 +25,7 @@ DATABASE_URL = f"{DB_ENGINE}+asyncpg://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_POR
 
 
 class Base(DeclarativeBase):
-    pass
+    """Base class for all database models."""
 
 
 # Async engine
@@ -34,5 +40,6 @@ AsyncSessionLocal = async_sessionmaker(
 
 # Dependency
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
+    """Database session dependency for FastAPI."""
     async with AsyncSessionLocal() as session:
         yield session

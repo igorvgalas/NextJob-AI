@@ -5,10 +5,9 @@ from sqlalchemy import func
 from typing import List
 from app.schemas import schemas
 from sqlalchemy.orm import selectinload
-from app.models import JobOffer, Skill, UserSkill
+from app import models
 from app.database import get_db
 from app.auth.auth import fastapi_users 
-from app.models import User
 
 get_current_user = fastapi_users.current_user()
 router = APIRouter()
@@ -22,13 +21,14 @@ async def get_job_offers(
     db: AsyncSession = Depends(get_db),
     limit: int = Query(20, ge=1),
     offset: int = Query(0, ge=0),
+    current_user: models.User = Depends(get_current_user)
 ):
-    total_query = await db.execute(select(func.count()).select_from(JobOffer))
+    total_query = await db.execute(select(func.count()).select_from(models.JobOffer))
     total = total_query.scalar()
 
     offers_query = await db.execute(
-        select(JobOffer)
-        .order_by(JobOffer.created_at.desc())
+        select(models.JobOffer)
+        .order_by(models.JobOffer.created_at.desc())
         .offset(offset)
         .limit(limit)
     )
@@ -53,8 +53,8 @@ async def get_job_offers(
 
 
 @router.delete("/job_offers/{job_id}", response_model=schemas.JobOfferRead)
-async def delete_job_offer(job_id: int, db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(JobOffer).where(JobOffer.id == job_id))
+async def delete_job_offer(job_id: int, db: AsyncSession = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    result = await db.execute(select(models.JobOffer).where(models.JobOffer.id == job_id))
     job_offer = result.scalars().first()
     if not job_offer:
         raise HTTPException(status_code=404, detail="Job offer not found")
@@ -68,7 +68,7 @@ async def delete_job_offer(job_id: int, db: AsyncSession = Depends(get_db)):
 async def create_job_offers_bulk(
     payload: schemas.JobOfferBulkCreate,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: models.User = Depends(get_current_user)
 ):
     offers = [models.JobOffer(user_id=current_user.id, **offer.dict(exclude_unset=True)) for offer in payload.job_offers]
     db.add_all(offers)
@@ -82,14 +82,14 @@ async def create_job_offers_bulk(
 
 # Skill Routes
 @router.get("/skills", response_model=List[schemas.Skill])
-async def get_skills(db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(Skill))
+async def get_skills(db: AsyncSession = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    result = await db.execute(select(models.Skill))
     return result.scalars().all()
 
 
 @router.get("/skills/{skill_id}", response_model=schemas.Skill)
-async def get_skill(skill_id: int, db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(Skill).where(Skill.id == skill_id))
+async def get_skill(skill_id: int, db: AsyncSession = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    result = await db.execute(select(models.Skill).where(models.Skill.id == skill_id))
     skill = result.scalars().first()
     if not skill:
         raise HTTPException(status_code=404, detail="Skill not found")
@@ -97,8 +97,8 @@ async def get_skill(skill_id: int, db: AsyncSession = Depends(get_db)):
 
 
 @router.post("/skills", response_model=schemas.Skill)
-async def create_skill(skill: schemas.SkillCreate, db: AsyncSession = Depends(get_db)):
-    db_skill = Skill(**skill.dict())
+async def create_skill(skill: schemas.SkillCreate, db: AsyncSession = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    db_skill = models.Skill(**skill.dict())
     db.add(db_skill)
     await db.commit()
     await db.refresh(db_skill)
@@ -107,17 +107,17 @@ async def create_skill(skill: schemas.SkillCreate, db: AsyncSession = Depends(ge
 
 # UserSkill Routes
 @router.get("/user_skills", response_model=List[schemas.UserSkill])
-async def get_user_skills(db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(UserSkill))
+async def get_user_skills(db: AsyncSession = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    result = await db.execute(select(models.UserSkill))
     return result.scalars().all()
 
 
 @router.get("/user_skills/user/{user_id}", response_model=schemas.UserSkill)
-async def get_user_skills_by_user(user_id: int, db: AsyncSession = Depends(get_db)):
+async def get_user_skills_by_user(user_id: int, db: AsyncSession = Depends(get_db), current_user: models.User = Depends(get_current_user)):
     result = await db.execute(
-        select(UserSkill)
-        .options(selectinload(UserSkill.skills))
-        .where(UserSkill.user_id == user_id)
+        select(models.UserSkill)
+        .options(selectinload(models.UserSkill.skills))
+        .where(models.UserSkill.user_id == user_id)
     )
     user_skill = result.scalars().first()
     if not user_skill:
@@ -126,19 +126,19 @@ async def get_user_skills_by_user(user_id: int, db: AsyncSession = Depends(get_d
 
 
 @router.post("/user_skills", response_model=schemas.UserSkill)
-async def create_user_skill(payload: schemas.UserSkillCreate, db: AsyncSession = Depends(get_db)):
+async def create_user_skill(payload: schemas.UserSkillCreate, db: AsyncSession = Depends(get_db), current_user: models.User = Depends(get_current_user)):
     existing = await db.execute(
-        select(UserSkill).where(UserSkill.user_id == payload.user_id)
+        select(models.UserSkill).where(models.UserSkill.user_id == payload.user_id)
     )
     if existing.scalars().first():
         raise HTTPException(status_code=400, detail="UserSkill already exists")
 
     # створюємо UserSkill
-    user_skill = UserSkill(user_id=payload.user_id)
+    user_skill = models.UserSkill(user_id=payload.user_id)
 
     # отримуємо обʼєкти Skill
     skills = await db.execute(
-        select(Skill).where(Skill.id.in_(payload.skill_ids))
+        select(models.Skill).where(models.Skill.id.in_(payload.skill_ids))
     )
     user_skill.skills = skills.scalars().all()
 
@@ -146,9 +146,9 @@ async def create_user_skill(payload: schemas.UserSkillCreate, db: AsyncSession =
     await db.commit()
 
     result = await db.execute(
-        select(UserSkill)
-        .options(selectinload(UserSkill.skills))
-        .where(UserSkill.id == user_skill.id)
+        select(models.UserSkill)
+        .options(selectinload(models.UserSkill.skills))
+        .where(models.UserSkill.id == user_skill.id)
     )
     user_skill = result.scalars().first()
 
@@ -156,9 +156,9 @@ async def create_user_skill(payload: schemas.UserSkillCreate, db: AsyncSession =
 
 
 @router.patch("/user_skills/{user_skill_id}", response_model=schemas.UserSkill)
-async def update_user_skill(user_skill_id: int, payload: schemas.UserSkillUpdate, db: AsyncSession = Depends(get_db)):
+async def update_user_skill(user_skill_id: int, payload: schemas.UserSkillUpdate, db: AsyncSession = Depends(get_db), current_user: models.User = Depends(get_current_user)):
     result = await db.execute(
-        select(UserSkill).options(selectinload(UserSkill.skills)).where(UserSkill.id == user_skill_id)
+        select(models.UserSkill).options(selectinload(models.UserSkill.skills)).where(models.UserSkill.id == user_skill_id)
     )
     user_skill = result.scalars().first()
 
@@ -166,7 +166,7 @@ async def update_user_skill(user_skill_id: int, payload: schemas.UserSkillUpdate
         raise HTTPException(status_code=404, detail="UserSkill not found")
 
     # Завантажуємо нові скіли
-    skills_result = await db.execute(select(Skill).where(Skill.id.in_(payload.skill_ids)))
+    skills_result = await db.execute(select(models.Skill).where(models.Skill.id.in_(payload.skill_ids)))
     new_skills = skills_result.scalars().all()
 
     # Оновлюємо звʼязок
@@ -183,8 +183,8 @@ async def update_user_skill(user_skill_id: int, payload: schemas.UserSkillUpdate
 
 
 @router.get("/user_skill_stats", response_model=List[schemas.UserSkillStat])
-async def get_user_skill_stats(db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(UserSkill))
+async def get_user_skill_stats(db: AsyncSession = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    result = await db.execute(select(models.UserSkill))
     stats = result.scalars().all()
     return [
         schemas.UserSkillStat(
