@@ -6,6 +6,9 @@ This module contains the main FastAPI application instance and configuration.
 
 import os
 import logging
+from dotenv import load_dotenv
+
+load_dotenv()
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -15,6 +18,7 @@ from app.middleware.allowed_hosts import AllowedHostsMiddleware
 from app.schemas.schemas import UserRead, UserUpdate
 from app.routes.routes import router
 from app.auth.router import router as auth_router
+from app.routes.service_routes import router as service_routes
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -40,7 +44,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(router)
+app.include_router(router, tags=["api"])
 
 app.include_router(auth_router, prefix="/auth", tags=["auth"])
 
@@ -49,3 +53,5 @@ app.include_router(
     prefix="/users",
     tags=["users"]
 )
+
+app.include_router(service_routes, prefix="/service", tags=["service"])

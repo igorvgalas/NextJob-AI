@@ -131,7 +131,7 @@ export default function LoginScreen() {
       />
 
       <Formik
-        initialValues={{ email: "", password: "" }}
+        initialValues={{ username: "", password: "" }}
         onSubmit={(values) => {
           login(values);
         }}
@@ -144,7 +144,7 @@ export default function LoginScreen() {
                 <Input borderColor="$coolGray600">
                   <InputField
                     type="text"
-                    value={values.email}
+                    value={values.username}
                     onChangeText={handleChange("email")}
                     placeholder="Enter your email"
                     color="$white"
@@ -174,7 +174,7 @@ export default function LoginScreen() {
                 bg="$blue600"
                 borderRadius="$md"
                 onPress={handleSubmit as any}
-                isDisabled={!values.email || !values.password}
+                isDisabled={!values.username || !values.password}
               >
                 <ButtonText color="$white" fontWeight="$bold">
                   Log in

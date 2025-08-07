@@ -14,15 +14,29 @@ BUFFER_SIZE = 5
 job_buffer = []
 
 API_URL = "http://0.0.0.0:8000/job_offers/bulk_create"
-HEADERS = {
-    "Content-Type": "application/json",
-    # "Authorization": "Token <your-token>"  # optional
-}
+SERVICE_NAME = "digest_generator"
+SERVICE_SECRET = "digest_generator_secret"
+SERVICE_TOKEN_ENDPOINT = "http://localhost:8001/auth/token"
 
+def get_service_auth_token():
+    """
+    Retrieves the service auth token from environment variables or a config file.
+    """
+    response = requests.post(SERVICE_TOKEN_ENDPOINT, json={
+        "service_name": SERVICE_NAME,
+        "service_secret": SERVICE_SECRET
+    })
+    if response.status_code == 200:
+        return response.json().get("access_token")
+    raise Exception("Failed to retrieve service auth token")
 
 def fetch_user_tech_stack(user_id: int) -> list[str]:
     try:
-        response = requests.get(f"http://0.0.0.0:8000/user_skills/user/{user_id}", timeout=10)
+        response = requests.get(
+            f"http://0.0.0.0:8000/service/user_skills/user/{user_id}",
+            headers={"Authorization": f"Bearer {get_service_auth_token()}"},
+            timeout=10
+        )
         response.raise_for_status()
         data = response.json()
         print(f"✅ Fetched user skills for user {user_id}: {data}")
@@ -40,7 +54,7 @@ def fetch_user_tech_stack(user_id: int) -> list[str]:
 def send_bulk_to_api(jobs: list[dict]):
     try:
         response = requests.post(
-            API_URL, json={"job_offers": jobs}, headers=HEADERS, timeout=10)
+            API_URL, json={"job_offers": jobs}, headers={"Authorization": f"Bearer {get_service_auth_token()}"}, timeout=10)
         if response.status_code == 201:
             print(f"✅ Sent {len(jobs)} jobs to API.")
         else:

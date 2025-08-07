@@ -1,19 +1,21 @@
 import os
 import json
+from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException
-from pydantic import BaseModel
+from fastapi_users.authentication.strategy.jwt import JWTStrategy
+from fastapi_users.exceptions import UserNotExists
+from fastapi_users.password import PasswordHelper
 from google.oauth2 import id_token as google_id_token
 from google.auth.transport import requests as google_requests
-from fastapi_users.exceptions import UserNotExists
+from pydantic import BaseModel
+from sqlalchemy.ext.asyncio import AsyncSession
 from app.schemas.schemas import UserCreate
 from app.database import get_db
-from fastapi_users.password import PasswordHelper
 from app.auth.auth import auth_backend
 from app.auth.auth import get_user_manager
-from sqlalchemy.ext.asyncio import AsyncSession
-from fastapi_users.authentication.strategy.jwt import JWTStrategy
-
 from app.helpers.create_refresh_token import create_refresh_token
+from sqlalchemy import update, insert
+from app.models import GoogleCredentials
 
 router = APIRouter()
 
@@ -48,23 +50,6 @@ async def google_login(
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Invalid token: {e}")
 
-    # Save Gmail access credentials
-    if email:
-        try:
-            with open(CREDENTIALS_PATH, "r", encoding="utf-8") as f:
-                all_credentials = json.load(f)
-        except Exception:
-            all_credentials = {}
-
-        all_credentials[email] = {
-            "access_token": data.accessToken,
-            "refresh_token": data.refreshToken,
-        }
-
-        with open(CREDENTIALS_PATH, "w", encoding="utf-8") as f:
-            json.dump(all_credentials, f, indent=2)
-
-    # Check if user exists
     try:
         user = await user_manager.get_by_email(email)
         created = False
@@ -80,11 +65,37 @@ async def google_login(
             request=None,
         )
         created = True
+
+    if email:
+        stmt = (
+            update(GoogleCredentials)
+            .where(GoogleCredentials.user_id == user.id)
+            .values(
+            access_token=data.accessToken,
+            refresh_token=data.refreshToken,
+            updated_at=datetime.utcnow()
+            )
+        )
+        result = await session.execute(stmt)
+        if result.rowcount == 0:
+            stmt = (
+                insert(GoogleCredentials)
+                .values(
+                user_id=user.id,
+                access_token=data.accessToken,
+                refresh_token=data.refreshToken,
+                created_at=datetime.utcnow(),
+                updated_at=datetime.utcnow()
+                )
+            )
+            await session.execute(stmt)
+        await session.commit()
+
     # Generate access token
     strategy: JWTStrategy = auth_backend.get_strategy()  # type: ignore
     access_token = await strategy.write_token(user)
 
-# Generate refresh token manually
+    # Generate refresh token manually
     refresh_token = create_refresh_token(user)
 
     return {

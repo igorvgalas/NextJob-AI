@@ -17,7 +17,6 @@ user_skill_association = Table(
     Column('skill_id', Integer, ForeignKey('skills.id'))
 )
 
-
 class JobOffer(Base):
     """Model representing a job offer."""
 
@@ -90,3 +89,12 @@ class User(SQLAlchemyBaseUserTable, Base):
 
     job_offers = relationship("JobOffer", back_populates="user")
     user_skills = relationship("UserSkill", back_populates="user")
+
+class GoogleCredentials(Base):
+    __tablename__ = 'google_credentials'
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey('users.id'))
+    access_token = Column(Text, nullable=False)
+    refresh_token = Column(Text, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow, index=True)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

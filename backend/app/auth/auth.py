@@ -1,12 +1,13 @@
+import os
 from fastapi import Depends
 from fastapi_users import FastAPIUsers
 from fastapi_users.authentication import JWTStrategy, AuthenticationBackend, BearerTransport
 from fastapi_users.db import SQLAlchemyUserDatabase
+from fastapi_users.manager import BaseUserManager
+from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import User
 from app.database import get_db
-from sqlalchemy.ext.asyncio import AsyncSession
-from fastapi_users.manager import BaseUserManager
-import os
+
 
 SECRET = os.getenv("SECRET_KEY", "")
 ACCESS_TOKEN_LIFETIME_MINUTES = os.getenv("ACCESS_TOKEN_LIFETIME_MINUTES", 15)

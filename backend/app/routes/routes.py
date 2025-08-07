@@ -8,13 +8,12 @@ from sqlalchemy.orm import selectinload
 from app import models
 from app.database import get_db
 from app.auth.auth import fastapi_users 
+from app.helpers.service_token_verifire import verify_service_token
 
 get_current_user = fastapi_users.current_user()
 router = APIRouter()
 
 # JobOffer Routes
-
-
 @router.get("/job_offers", response_model=dict)
 async def get_job_offers(
     request: Request,
@@ -63,23 +62,6 @@ async def delete_job_offer(job_id: int, db: AsyncSession = Depends(get_db), curr
     await db.commit()
     return job_offer
 
-
-@router.post("/job_offers/bulk_create", response_model=List[schemas.JobOfferRead])
-async def create_job_offers_bulk(
-    payload: schemas.JobOfferBulkCreate,
-    db: AsyncSession = Depends(get_db),
-    current_user: models.User = Depends(get_current_user)
-):
-    offers = [models.JobOffer(user_id=current_user.id, **offer.dict(exclude_unset=True)) for offer in payload.job_offers]
-    db.add_all(offers)
-    await db.commit()
-
-    for offer in offers:
-        await db.refresh(offer)
-
-    return offers
-
-
 # Skill Routes
 @router.get("/skills", response_model=List[schemas.Skill])
 async def get_skills(db: AsyncSession = Depends(get_db), current_user: models.User = Depends(get_current_user)):
@@ -96,13 +78,13 @@ async def get_skill(skill_id: int, db: AsyncSession = Depends(get_db), current_u
     return skill
 
 
-@router.post("/skills", response_model=schemas.Skill)
-async def create_skill(skill: schemas.SkillCreate, db: AsyncSession = Depends(get_db), current_user: models.User = Depends(get_current_user)):
-    db_skill = models.Skill(**skill.dict())
-    db.add(db_skill)
-    await db.commit()
-    await db.refresh(db_skill)
-    return db_skill
+# @router.post("/skills", response_model=schemas.Skill)
+# async def create_skill(skill: schemas.SkillCreate, db: AsyncSession = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+#     db_skill = models.Skill(**skill.dict())
+#     db.add(db_skill)
+#     await db.commit()
+#     await db.refresh(db_skill)
+#     return db_skill
 
 
 # UserSkill Routes
@@ -126,7 +108,10 @@ async def get_user_skills_by_user(user_id: int, db: AsyncSession = Depends(get_d
 
 
 @router.post("/user_skills", response_model=schemas.UserSkill)
-async def create_user_skill(payload: schemas.UserSkillCreate, db: AsyncSession = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+async def create_user_skill(
+    payload: schemas.UserSkillCreate, 
+    db: AsyncSession = Depends(get_db), 
+    current_user: models.User = Depends(get_current_user)):
     existing = await db.execute(
         select(models.UserSkill).where(models.UserSkill.user_id == payload.user_id)
     )
@@ -156,7 +141,12 @@ async def create_user_skill(payload: schemas.UserSkillCreate, db: AsyncSession =
 
 
 @router.patch("/user_skills/{user_skill_id}", response_model=schemas.UserSkill)
-async def update_user_skill(user_skill_id: int, payload: schemas.UserSkillUpdate, db: AsyncSession = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+async def update_user_skill(
+    user_skill_id: int, 
+    payload: schemas.UserSkillUpdate, 
+    db: AsyncSession = Depends(get_db), 
+    current_user: models.User = Depends(get_current_user)
+    ):
     result = await db.execute(
         select(models.UserSkill).options(selectinload(models.UserSkill.skills)).where(models.UserSkill.id == user_skill_id)
     )
@@ -178,10 +168,6 @@ async def update_user_skill(user_skill_id: int, payload: schemas.UserSkillUpdate
 
     return user_skill
 
-
-# UserSkillStat Route
-
-
 @router.get("/user_skill_stats", response_model=List[schemas.UserSkillStat])
 async def get_user_skill_stats(db: AsyncSession = Depends(get_db), current_user: models.User = Depends(get_current_user)):
     result = await db.execute(select(models.UserSkill))
@@ -192,3 +178,4 @@ async def get_user_skill_stats(db: AsyncSession = Depends(get_db), current_user:
         )
         for stat in stats
     ]
+

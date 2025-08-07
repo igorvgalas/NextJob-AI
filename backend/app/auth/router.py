@@ -36,16 +36,17 @@ class LoginCredentials(BaseModel):
 async def custom_jwt_login(
     request: Request,
     user_manager=Depends(get_user_manager),
-    email: str = Form(...),
+    username: str = Form(...),
     password: str = Form(...),
 ):
     """Custom JWT login endpoint that returns both access and refresh tokens."""
-    credentials = LoginCredentials(username=email, password=password)
+    credentials = LoginCredentials(username=username, password=password)
     user = await user_manager.authenticate(credentials)
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
     strategy: JWTStrategy = auth_backend.get_strategy()  # type: ignore
     access_token = await strategy.write_token(user)
+    print(f"Access token generated for user {user.id} - {access_token}")
     refresh_token = create_refresh_token(user)
     return {
         "access": access_token,

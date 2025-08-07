@@ -5,6 +5,7 @@ from fastapi_users.schemas import BaseUser, BaseUserCreate, BaseUserUpdate
 
 
 class JobOfferBase(BaseModel):
+    """Base schema for job offers."""
     match_score: float = Field(
         default=0.0, description="Match score for the job offer")
     reason: Optional[str] = Field(
@@ -96,3 +97,40 @@ class UserUpdate(BaseUserUpdate):
     password: Optional[str] = None
     first_name: Optional[str] = None
     last_name: Optional[str] = None
+
+class GoogleCredentials(BaseModel):
+    user_id: int
+    access_token: str
+    refresh_token: Optional[str] = None
+    created_at: datetime
+    updated_at: datetime
+
+    class Config:
+        orm_mode = True
+        json_encoders = {
+            datetime: lambda v: v.isoformat() if v else None
+        }
+
+class GoogleCredentialsCreate(BaseModel):
+    user_id: int
+    access_token: str
+    refresh_token: Optional[str] = None
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
+
+    class Config:
+        orm_mode = True
+        json_encoders = {
+            datetime: lambda v: v.isoformat() if v else None
+        }
+
+class GoogleCredentialsUpdate(BaseModel):
+    access_token: Optional[str] = None
+    refresh_token: Optional[str] = None
+    updated_at: Optional[datetime] = None
+
+    class Config:
+        orm_mode = True
+        json_encoders = {
+            datetime: lambda v: v.isoformat() if v else None
+        }

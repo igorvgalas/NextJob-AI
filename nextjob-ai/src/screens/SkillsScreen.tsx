@@ -33,7 +33,9 @@ export default function SkillsScreen() {
   const { data: userSkills, isLoading: userSkillsLoading } = useApi<UserSkills>(
     {
       url: `/user_skills/user/${user.id}`,
-      options: {},
+      options: {
+        method: "GET",
+      },
     },
     {
       queryKey: ["userSkills", user.id],
