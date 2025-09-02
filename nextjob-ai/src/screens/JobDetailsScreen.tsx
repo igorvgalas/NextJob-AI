@@ -8,7 +8,7 @@ import {
   Badge,
   Icon,
 } from "@gluestack-ui/themed";
-import { JobType } from "../types/JobType";
+import { JobOffer } from "../types/JobType";
 import { ArrowLeft, MapPin } from "lucide-react-native";
 import { Pressable, ScrollView } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -17,7 +17,7 @@ import { Linking } from "react-native";
 export default function JobDetailsScreen() {
   const navigation = useNavigation();
   const route = useRoute();
-  const { job } = route.params as { job: JobType };
+  const { job } = route.params as { job: JobOffer };
 
   return (
       <Box flex={1} bg="$black" px="$5" pt="$12">
@@ -46,7 +46,7 @@ export default function JobDetailsScreen() {
                       </Text>
             <Badge bg="$blue600" borderRadius="$full" px="$3" py="$1">
               <Text color="$white" fontSize="$xs" fontWeight="$bold">
-                Matching {Math.round(job.match_score * 10)}%
+                Matching {Math.round(job.match_score * 100)}%
               </Text>
             </Badge>
           </HStack>

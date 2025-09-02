@@ -7,25 +7,20 @@ from app.schemas import schemas
 from sqlalchemy.orm import selectinload
 from app import models
 from app.database import get_db
-from app.auth.auth import fastapi_users 
 from app.helpers.service_token_verifire import verify_service_token
 
 router = APIRouter()
 
 @router.get("/google-creds/all", response_model=dict)
 async def get_all_google_credentials(
-    db: AsyncSession = Depends(get_db), 
-    service_token=Depends(verify_service_token)
+    db: AsyncSession = Depends(get_db),
 ):
-    stmt = (
-        select(models.GoogleCredentials, models.User)
-        .join(models.User, models.GoogleCredentials.user_id == models.User.id)
-    )
+    stmt = select(models.GoogleCredentials).options(selectinload(models.GoogleCredentials.user))
     result = await db.execute(stmt)
 
     creds_dict = {}
-    for creds, user in result.all():
-        creds_dict[user.email] = {
+    for creds in result.scalars().all():
+        creds_dict[creds.user.email] = {
             "access_token": creds.access_token,
             "refresh_token": creds.refresh_token,
             "user_id": creds.user_id,
@@ -35,9 +30,8 @@ async def get_all_google_credentials(
 
 @router.get("/user_skills/user/{user_id}", response_model=schemas.UserSkill)
 async def get_user_skills_by_user(
-    user_id: int, 
-    db: AsyncSession = Depends(get_db), 
-    service_token = Depends(verify_service_token)
+    user_id: int,
+    db: AsyncSession = Depends(get_db),
 ):
     result = await db.execute(
         select(models.UserSkill)
@@ -53,7 +47,6 @@ async def get_user_skills_by_user(
 async def create_job_offers_bulk(
     payload: schemas.JobOfferBulkCreate,
     db: AsyncSession = Depends(get_db),
-    service_token = Depends(verify_service_token)
 ):
     offers = [models.JobOffer(**offer.dict(exclude_unset=True)) for offer in payload.job_offers]
     db.add_all(offers)

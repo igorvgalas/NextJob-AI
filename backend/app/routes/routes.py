@@ -8,51 +8,51 @@ from sqlalchemy.orm import selectinload
 from app import models
 from app.database import get_db
 from app.auth.auth import fastapi_users 
+from app.schemas.schemas import JobOfferBase, JobOfferPage
+
 from app.helpers.service_token_verifire import verify_service_token
 
 get_current_user = fastapi_users.current_user()
 router = APIRouter()
 
 # JobOffer Routes
-@router.get("/job_offers", response_model=dict)
+@router.get("/job-offers", response_model=JobOfferPage)
 async def get_job_offers(
     request: Request,
     db: AsyncSession = Depends(get_db),
     limit: int = Query(20, ge=1),
     offset: int = Query(0, ge=0),
-    current_user: models.User = Depends(get_current_user)
+    current_user: models.User = Depends(get_current_user),
 ):
-    total_query = await db.execute(select(func.count()).select_from(models.JobOffer))
-    total = total_query.scalar()
+    total = (await db.execute(
+        select(func.count()).select_from(models.JobOffer)
+    )).scalar()
 
-    offers_query = await db.execute(
+    offers = (await db.execute(
         select(models.JobOffer)
         .order_by(models.JobOffer.created_at.desc())
         .offset(offset)
         .limit(limit)
-    )
-    offers = offers_query.scalars().all()
+    )).scalars().all()
 
     base_url = str(request.base_url).rstrip("/")
-    next_url = (
-        f"{base_url}/job_offers?limit={limit}&offset={offset + limit}"
+    next_url = f"{base_url}/job-offers?limit={limit}&offset={offset + limit}" \
         if total is not None and offset + limit < total else None
-    )
-    prev_url = (
-        f"{base_url}/job_offers?limit={limit}&offset={max(offset - limit, 0)}"
+    prev_url = f"{base_url}/job-offers?limit={limit}&offset={max(offset - limit, 0)}" \
         if offset > 0 else None
-    )
 
-    return {
-        "count": total,
-        "next": next_url,
-        "previous": prev_url,
-        "results": offers,
-    }
+    # validate/serialize ORM objects → Pydantic
+    results = [JobOfferBase.model_validate(o) for o in offers]
+
+    return JobOfferPage(count=total or 0, next=next_url, previous=prev_url, results=results)
 
 
-@router.delete("/job_offers/{job_id}", response_model=schemas.JobOfferRead)
-async def delete_job_offer(job_id: int, db: AsyncSession = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+@router.delete("/job-offers/{job_id}", response_model=schemas.JobOfferRead)
+async def delete_job_offer(
+    job_id: int, 
+    db: AsyncSession = Depends(get_db), 
+    current_user: models.User = Depends(get_current_user)
+    ):
     result = await db.execute(select(models.JobOffer).where(models.JobOffer.id == job_id))
     job_offer = result.scalars().first()
     if not job_offer:
@@ -89,13 +89,20 @@ async def get_skill(skill_id: int, db: AsyncSession = Depends(get_db), current_u
 
 # UserSkill Routes
 @router.get("/user_skills", response_model=List[schemas.UserSkill])
-async def get_user_skills(db: AsyncSession = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+async def get_user_skills(
+    db: AsyncSession = Depends(get_db), 
+    current_user: models.User = Depends(get_current_user)
+):
     result = await db.execute(select(models.UserSkill))
     return result.scalars().all()
 
 
 @router.get("/user_skills/user/{user_id}", response_model=schemas.UserSkill)
-async def get_user_skills_by_user(user_id: int, db: AsyncSession = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+async def get_user_skills_by_user(
+    user_id: int, 
+    db: AsyncSession = Depends(get_db), 
+    current_user: models.User = Depends(get_current_user)
+):
     result = await db.execute(
         select(models.UserSkill)
         .options(selectinload(models.UserSkill.skills))

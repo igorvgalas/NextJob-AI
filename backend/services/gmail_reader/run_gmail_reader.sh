@@ -8,11 +8,11 @@ LOG="/Users/cheef/Documents/nextjob-ai/services/gmail_reader/cron.log"
   pwd
   echo "Python path: $(which python)"
   cd /Users/cheef/Documents/nextjob-ai/services/gmail_reader || {
-    echo "❌ Cannot cd to target directory"
+    echo "Cannot cd to target directory"
     exit 1
   }
 
-  echo "✅ In directory: $(pwd)"
+  echo "In directory: $(pwd)"
   echo "Activating venv..."
   source venv/bin/activate || echo "⚠️ venv activation failed"
 

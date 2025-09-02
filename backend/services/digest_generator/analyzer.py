@@ -76,7 +76,7 @@ def analyze_job(jobs: dict, tech_stack: list) -> dict:
         )
         content = response.choices[0].message.content.strip()
     except Exception as e:  # pylint: disable=broad-except
-        print("❌ Error from g4f client:", e)
+        print("Error from g4f client:", e)
         return {}
     if content.startswith("```json"):
         content = content.removeprefix("```json").removesuffix("```").strip()
@@ -86,5 +86,5 @@ def analyze_job(jobs: dict, tech_stack: list) -> dict:
     try:
         return json.loads(content)
     except Exception:  # pylint: disable=broad-except
-        print("❌ Failed to parse GPT response:", content)
+        print("Failed to parse GPT response:", content)
         return {}

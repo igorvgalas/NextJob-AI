@@ -89,11 +89,13 @@ class User(SQLAlchemyBaseUserTable, Base):
 
     job_offers = relationship("JobOffer", back_populates="user")
     user_skills = relationship("UserSkill", back_populates="user")
+    google_credentials = relationship("GoogleCredentials", back_populates="user")
 
 class GoogleCredentials(Base):
     __tablename__ = 'google_credentials'
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey('users.id'))
+    user = relationship("User", back_populates="google_credentials")
     access_token = Column(Text, nullable=False)
     refresh_token = Column(Text, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow, index=True)

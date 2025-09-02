@@ -15,6 +15,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.auth.auth import fastapi_users
 from app.middleware.allowed_hosts import AllowedHostsMiddleware
+from app.middleware.service_token_middleware import ServiceAuthMiddleware
 from app.schemas.schemas import UserRead, UserUpdate
 from app.routes.routes import router
 from app.auth.router import router as auth_router
@@ -35,6 +36,7 @@ async def log_requests(request, call_next):
     return response
 
 app.add_middleware(AllowedHostsMiddleware)
+app.add_middleware(ServiceAuthMiddleware)
 
 app.add_middleware(
     CORSMiddleware,

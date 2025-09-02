@@ -8,11 +8,11 @@ import {
   Pressable,
   Badge,
 } from "@gluestack-ui/themed";
-import { JobType } from "../types/JobType";
+import { JobOffer } from "../types/JobType";
 import { formatDistanceToNow } from "date-fns";
 import { useNavigation } from "@react-navigation/native";
 
-export default function JobCard({ job }: { job: JobType }) {
+export default function JobCard({ job }: { job: JobOffer }) {
   const navigation = useNavigation();
 
   return (
@@ -45,7 +45,7 @@ export default function JobCard({ job }: { job: JobType }) {
               py="$1"
             >
               <Text color="$white" fontSize="$xs" fontWeight="$bold">
-                Matching {Math.round(job.match_score * 10)}%
+                Matching {Math.round(job.match_score * 100)}%
               </Text>
             </Badge>
           </HStack>

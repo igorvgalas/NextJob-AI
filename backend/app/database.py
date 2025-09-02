@@ -7,12 +7,8 @@ import os
 from typing import AsyncGenerator
 from urllib.parse import quote_plus
 
-from dotenv import load_dotenv
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 from sqlalchemy.orm import DeclarativeBase
-
-# Load environment variables
-load_dotenv()
 
 DB_ENGINE = os.getenv("DB_ENGINE", "postgresql")
 DB_NAME = os.getenv("DB_NAME", "dbname")

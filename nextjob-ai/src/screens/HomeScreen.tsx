@@ -1,33 +1,35 @@
-import React, { useState, useRef, useEffect } from "react";
+import React from "react";
 import { FlatList } from "react-native";
-import { Box, Text, Pressable, Spinner } from "@gluestack-ui/themed";
+import { Box, Text, Pressable } from "@gluestack-ui/themed";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 import { TrashIcon } from "lucide-react-native";
-import JobCard from "../components/JobCard";
 import AppLayout from "../layouts/AppLayout";
-import { useAuth } from "../context/AuthContext";
-import { queryApi, useApiMutation } from "../api/api";
-import { useNavigation } from "@react-navigation/native";
+import JobCard from "../components/JobCard";
 import Loader from "../components/Loader";
+import { useAuth } from "../context/AuthContext";
+import { useNavigation } from "@react-navigation/native";
+import { useApi, useApiMutation } from "../api/api";
+import { JobOffer } from "../types/JobType";
+
+type JobOfferPage = {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: JobOffer[];
+};
+
+const PAGE_SIZE = 20;
 
 export default function HomeScreen() {
   const user = useAuth();
   const navigation = useNavigation<any>();
-  const [jobs, setJobs] = useState<any[]>([]);
-  const [nextUrl, setNextUrl] = useState<string | null>("/api/jobs/?page=1");
-  const [loadingMore, setLoadingMore] = useState(false);
-  const [initialLoading, setInitialLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const isMounted = useRef(false);
-  // console.log("User:", user);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!user) {
-      navigation.reset({
-        index: 0,
-        routes: [{ name: "Login" }],
-      });
-    } else if (!user.username || user.username.trim() === "") {
+      navigation.reset({ index: 0, routes: [{ name: "Login" }] });
+      return;
+    }
+    if (!user.username || user.username.trim() === "") {
       navigation.reset({
         index: 0,
         routes: [{ name: "CompleteProfile", params: { user } }],
@@ -35,72 +37,78 @@ export default function HomeScreen() {
     }
   }, [user]);
 
-  const mutation = useApiMutation<any, any>(
-    (jobId: number) => ({
-      url: `/job-offers/${jobId}`,
-      options: {
-        method: "DELETE",
-      },
-    }),
-    undefined,
-    ["jobs", user?.id]
+  const [jobs, setJobs] = React.useState<JobOffer[]>([]);
+  const [nextUrl, setNextUrl] = React.useState<string | null>(null);
+  const [error, setError] = React.useState<string | null>(null);
+
+  const initialUrl = React.useMemo(() => {
+    const base = `/job-offers?limit=${PAGE_SIZE}&offset=0`;
+    return user?.id ? `${base}&user=${user.id}` : base;
+  }, [user?.id]);
+
+  const toRelative = (url: string | null) =>
+    url ? url.replace(/^http(s)?:\/\/[^/]+/, "") : null;
+
+  const initialQuery = useApi<JobOfferPage>(
+    { url: initialUrl, options: { method: "GET" } },
+    {
+      enabled: Boolean(user?.id),
+      onError: (err: any) => setError(err?.message || "Unknown error"),
+    },
+    [
+      "job-offers",
+      ["user", user?.id ?? null],
+      ["limit", PAGE_SIZE],
+      ["offset", 0],
+    ]
   );
 
-  // Fetch jobs page
-  const fetchJobs = async (url: string, replace = false) => {
-    setLoadingMore(true);
-    setError(null);
-    try {
-      const data = await queryApi<any>(
-        {
-          url,
-          options: { method: "GET" },
-        },
-        new Headers()
-      );
-      if (replace) {
-        setJobs(data.results);
-      } else {
-        setJobs((prev) => [...prev, ...data.results]);
-      }
-      setNextUrl(
-        data.next ? data.next.replace(/^http(s)?:\/\/[^/]+/, "") : null
-      );
-    } catch (e: any) {
-      setError(e.message || "Unknown error");
-    } finally {
-      setLoadingMore(false);
-      setInitialLoading(false);
-    }
-  };
-
-  // Initial load
+  // When first page arrives, populate jobs and next
   React.useEffect(() => {
-    if (!isMounted.current && user) {
-      fetchJobs(`/job-offers/?page=1&user=${user.id}`, true);
-      isMounted.current = true;
+    if (initialQuery.data) {
+      setJobs(initialQuery.data.results ?? []);
+      setNextUrl(toRelative(initialQuery.data.next));
+      setError(null);
     }
-  }, [user]);
+  }, [initialQuery.data]);
 
-  const handleEndReached = () => {
-    if (nextUrl && !loadingMore) {
-      fetchJobs(nextUrl);
+  const loadMoreMutation = useApiMutation<string, JobOfferPage>(
+    (url) => ({ url, options: { method: "GET" } }),
+    {
+      onSuccess: (data) => {
+        setJobs((prev) => [...prev, ...(data.results ?? [])]);
+        setNextUrl(toRelative(data.next));
+      },
+      onError: (err: any) => setError(err?.message || "Unknown error"),
     }
-  };
+  );
+
+  const loadMore = React.useCallback(() => {
+    if (nextUrl && !loadMoreMutation.isPending) {
+      loadMoreMutation.mutate(nextUrl);
+    }
+  }, [nextUrl, loadMoreMutation.isPending]);
+
+  const deleteMutation = useApiMutation<number, void>(
+    (jobId) => ({ url: `/job-offers/${jobId}`, options: { method: "DELETE" } }),
+    undefined,
+    ["job-offers"]
+  );
 
   const handleDeleteUI = (jobId: number) => {
-    mutation.mutate(jobId, {
-      onSuccess: () => {
-        setJobs((prev) => prev.filter((job) => job.id !== jobId));
-        fetchJobs(`/job-offers/?page=1&user=${user.id}`, true);
-      },
-      onError: (error) => {
-        console.error("Error deleting job:", error);
-      },
+    setJobs((prev) => prev.filter((j) => j.id !== jobId)); // optimistic
+    deleteMutation.mutate(jobId, {
+      onError: () => initialQuery.refetch(), // rollback by refetching first page
     });
   };
 
-  if (initialLoading) {
+  const isInitialLoading = initialQuery.isLoading && !initialQuery.data;
+  const isFetchingMore = loadMoreMutation.isPending;
+  const isFetchingInitial = initialQuery.isFetching; // bg refetch
+
+  if (!user) return null;
+
+  if (isInitialLoading) {
     return <Loader />;
   }
 
@@ -117,7 +125,7 @@ export default function HomeScreen() {
             alignItems="center"
           >
             <Text color="$white" fontSize="$lg" fontWeight="$bold">
-              Welcome, {user.username}!
+              Welcome, {user.username || "there"}!
             </Text>
             <Text color="$coolGray200" fontSize="$md" mt={2} textAlign="center">
               Discover your next opportunity. Browse the latest job offers
@@ -125,15 +133,12 @@ export default function HomeScreen() {
             </Text>
           </Box>
         </Box>
+
         <Box flex={1} justifyContent="center" alignItems="center">
           <Text color="$red600" fontSize="$lg">
             {error}
           </Text>
-          <Pressable
-            onPress={() =>
-              fetchJobs(`/job-offers/?page=1&user=${user.id}`, true)
-            }
-          >
+          <Pressable onPress={() => initialQuery.refetch()}>
             <Text color="$blue600" fontSize="$md" mt={2}>
               Retry
             </Text>
@@ -155,16 +160,17 @@ export default function HomeScreen() {
           alignItems="center"
         >
           <Text color="$white" fontSize="$lg" fontWeight="$bold">
-            Welcome, {user.username}!
+            Welcome, {user.username || "there"}!
           </Text>
           <Text color="$coolGray200" fontSize="$md" mt={2} textAlign="center">
             Discover your next opportunity. Browse the latest job offers below.
           </Text>
         </Box>
       </Box>
+
       <FlatList
         data={jobs}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => String(item.id)}
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => (
           <Swipeable
@@ -187,12 +193,12 @@ export default function HomeScreen() {
             <JobCard job={item} />
           </Swipeable>
         )}
-        onEndReached={handleEndReached}
         onEndReachedThreshold={0.5}
+        onEndReached={() => nextUrl && loadMore()}
         ListFooterComponent={
-          loadingMore ? (
+          isFetchingMore || isFetchingInitial ? (
             <Box py={4} alignItems="center">
-              <Text color="$blue500">Loading more jobs...</Text>
+              <Text>Loading…</Text>
             </Box>
           ) : null
         }

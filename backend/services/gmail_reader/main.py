@@ -29,17 +29,17 @@ class GmailJobFetcher:
 
     def process_emails(self):
         for email, service in self.services.items():
-            print(f"📨 Checking emails for {email}")
+            print(f"Checking emails for {email}")
             results = service.users().messages().list(userId='me', maxResults=100).execute()
 
             if 'messages' not in results:
-                print(f"📭 No messages found for {email}.")
+                print(f"No messages found for {email}.")
                 continue
 
             for msg in results.get('messages', []):
                 msg_id = msg['id']
                 if msg_id in self.processed_ids:
-                    print(f"⏩ Skipping already processed message {msg_id} for {email}")
+                    print(f"Skipping already processed message {msg_id} for {email}")
                     continue
 
                 msg_data = service.users().messages().get(userId='me', id=msg_id, format='full').execute()
@@ -58,16 +58,16 @@ class GmailJobFetcher:
                         'id': msg_id,
                     })
                     self.new_ids.add(msg_id)
-                    print(f"✅ Published new job from message {msg_id} for {email}")
+                    print(f"Published new job from message {msg_id} for {email}")
                 else:
-                    print(f"❌ No keywords found in message {msg_id} for {email}, skipped")
+                    print(f"No keywords found in message {msg_id} for {email}, skipped")
 
         self._finalize()
 
     def _finalize(self):
         self.processed_ids.update(self.new_ids)
         self._save_processed_ids()
-        print(f"💾 Saved {len(self.new_ids)} new processed message IDs.")
+        print(f"Saved {len(self.new_ids)} new processed message IDs.")
 
 
 if __name__ == "__main__":

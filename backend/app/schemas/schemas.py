@@ -1,37 +1,43 @@
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, ConfigDict
 from typing import List, Optional
 from datetime import datetime
 from fastapi_users.schemas import BaseUser, BaseUserCreate, BaseUserUpdate
 
 
 class JobOfferBase(BaseModel):
-    """Base schema for job offers."""
-    match_score: float = Field(
-        default=0.0, description="Match score for the job offer")
-    reason: Optional[str] = Field(
-        None, description="Reason for the match score")
-    technologies_matched: Optional[List[str]] = Field(
-        None, description="List of matched technologies")
-    title: Optional[str] = Field(None, max_length=255, description="Job title")
-    company: Optional[str] = Field(
-        None, max_length=255, description="Company name")
-    location: Optional[str] = Field(
-        None, max_length=255, description="Job location")
-    description: Optional[str] = Field(None, description="Job description")
-    apply_link: Optional[str] = Field(
-        None, max_length=1020, description="Application link")
+    id: int
+    user_id: int | None = None
+    email: str | None = None
+    match_score: float
+    reason: str | None = None
+    technologies_matched: str | None = None
+    title: str | None = None
+    company: str | None = None
+    location: str | None = None
+    description: str | None = None
+    apply_link: str | None = None
+    created_at: datetime
 
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class JobOfferPage(BaseModel):
+    count: int
+    next: str | None
+    previous: str | None
+    results: list[JobOfferBase]
 
 class JobOfferCreate(JobOfferBase):
     email: Optional[EmailStr] = Field(
-        None, description="Email associated with the job offer")
+        default=None, description="Email associated with the job offer")
 
 class JobOfferBulkCreate(BaseModel):
     job_offers: List[JobOfferCreate]
 
 class JobOfferRead(JobOfferBase):
     id: int
-    user_id: Optional[int]
+    user_id: Optional[int] = None
     created_at: datetime
 
     class Config:
