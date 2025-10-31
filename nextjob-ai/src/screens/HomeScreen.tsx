@@ -1,7 +1,6 @@
 import React from "react";
-import { FlatList } from "react-native";
+import { FlatList, View } from "react-native";
 import { Box, Text, Pressable } from "@gluestack-ui/themed";
-import Swipeable from "react-native-gesture-handler/Swipeable";
 import { TrashIcon } from "lucide-react-native";
 import AppLayout from "../layouts/AppLayout";
 import JobCard from "../components/JobCard";
@@ -50,17 +49,21 @@ export default function HomeScreen() {
     url ? url.replace(/^http(s)?:\/\/[^/]+/, "") : null;
 
   const initialQuery = useApi<JobOfferPage>(
-    { url: initialUrl, options: { method: "GET" } },
     {
-      enabled: Boolean(user?.id),
-      onError: (err: any) => setError(err?.message || "Unknown error"),
+      url: initialUrl,
+      options: {
+        method: "GET",
+      },
     },
-    [
-      "job-offers",
-      ["user", user?.id ?? null],
-      ["limit", PAGE_SIZE],
-      ["offset", 0],
-    ]
+    {
+      queryKey: [
+        "job-offers",
+        ["user", user?.id ?? null],
+        ["limit", PAGE_SIZE],
+        ["offset", 0],
+      ],
+      enabled: Boolean(user?.id),
+    }
   );
 
   // When first page arrives, populate jobs and next
@@ -173,25 +176,22 @@ export default function HomeScreen() {
         keyExtractor={(item) => String(item.id)}
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => (
-          <Swipeable
-            renderRightActions={() => (
-              <Box
-                mt={2}
-                justifyContent="center"
-                alignItems="center"
-                width={80}
-                bg="$red600"
-                height="85%"
-                borderRadius={8}
-              >
-                <Pressable onPress={() => handleDeleteUI(item.id)}>
-                  <TrashIcon color="white" size={28} />
-                </Pressable>
-              </Box>
-            )}
-          >
+          <View style={{ position: "relative" }}>
             <JobCard job={item} />
-          </Swipeable>
+            <Box
+              position="absolute"
+              top={8}
+              right={8}
+              bg="$red600"
+              borderRadius={20}
+              padding={8}
+              zIndex={1}
+            >
+              <Pressable onPress={() => handleDeleteUI(item.id)}>
+                <TrashIcon color="white" size={16} />
+              </Pressable>
+            </Box>
+          </View>
         )}
         onEndReachedThreshold={0.5}
         onEndReached={() => nextUrl && loadMore()}
