@@ -4,6 +4,7 @@ FastAPI main application module.
 This module contains the main FastAPI application instance and configuration.
 """
 
+# Load environment variables BEFORE importing modules that read env at import-time
 import os
 import logging
 from dotenv import load_dotenv
@@ -11,8 +12,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from fastapi import FastAPI
+import asyncio
+import time
 from fastapi.middleware.cors import CORSMiddleware
-
 from app.auth.auth import fastapi_users
 from app.middleware.allowed_hosts import AllowedHostsMiddleware
 from app.middleware.service_token_middleware import ServiceAuthMiddleware
@@ -21,12 +23,15 @@ from app.routes.routes import router
 from app.auth.router import router as auth_router
 from app.routes.service_routes import router as service_routes
 
+
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',') if os.getenv('ALLOWED_HOSTS') else []
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(
+    ',') if os.getenv('ALLOWED_HOSTS') else []
 
 app = FastAPI(debug=True, title="NextJob AI API", version="1.0.0")
+
 
 @app.middleware("http")
 async def log_requests(request, call_next):
@@ -57,3 +62,23 @@ app.include_router(
 )
 
 app.include_router(service_routes, prefix="/service", tags=["service"])
+
+# Health check endpoints for sync vs async behavior comparison
+
+
+@app.get("/health/sync")
+def health_sync():
+    start = time.perf_counter()
+    # Simulate quick CPU-bound work
+    _ = sum(range(1000))
+    duration_ms = (time.perf_counter() - start) * 1000
+    return {"status": "ok", "mode": "sync", "duration_ms": round(duration_ms, 3)}
+
+
+@app.get("/health/async")
+async def health_async():
+    start = time.perf_counter()
+    # Simulate yielding to the event loop (I/O-like)
+    await asyncio.sleep(0)
+    duration_ms = (time.perf_counter() - start) * 1000
+    return {"status": "ok", "mode": "async", "duration_ms": round(duration_ms, 3)}

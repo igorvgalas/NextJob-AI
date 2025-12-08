@@ -18,7 +18,6 @@ class JobOfferBase(BaseModel):
     apply_link: str | None = None
     created_at: datetime
 
-
     model_config = ConfigDict(from_attributes=True)
 
 
@@ -28,20 +27,22 @@ class JobOfferPage(BaseModel):
     previous: str | None
     results: list[JobOfferBase]
 
+
 class JobOfferCreate(JobOfferBase):
     email: Optional[EmailStr] = Field(
         default=None, description="Email associated with the job offer")
 
+
 class JobOfferBulkCreate(BaseModel):
     job_offers: List[JobOfferCreate]
+
 
 class JobOfferRead(JobOfferBase):
     id: int
     user_id: Optional[int] = None
     created_at: datetime
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class SkillBase(BaseModel):
@@ -55,24 +56,25 @@ class SkillCreate(SkillBase):
 class Skill(SkillBase):
     id: int
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class UserSkillBase(BaseModel):
     user_id: int
+
 
 class UserSkill(UserSkillBase):
     id: int
     user_id: int
     skills: List[Skill]
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
+
 
 class UserSkillCreate(UserSkillBase):
-    user_id: int 
-    skill_ids: List[int] 
+    user_id: int
+    skill_ids: List[int]
+
 
 class UserSkillUpdate(BaseModel):
     skill_ids: List[int]
@@ -93,16 +95,19 @@ class UserRead(BaseUser[int]):
     created_at: Optional[datetime]
     updated_at: Optional[datetime]
 
+
 class UserCreate(BaseUserCreate):
     first_name: Optional[str]
     last_name: Optional[str]
     is_staff: Optional[bool] = False
+
 
 class UserUpdate(BaseUserUpdate):
     username: Optional[str] = None
     password: Optional[str] = None
     first_name: Optional[str] = None
     last_name: Optional[str] = None
+
 
 class GoogleCredentials(BaseModel):
     user_id: int
@@ -111,11 +116,8 @@ class GoogleCredentials(BaseModel):
     created_at: datetime
     updated_at: datetime
 
-    class Config:
-        orm_mode = True
-        json_encoders = {
-            datetime: lambda v: v.isoformat() if v else None
-        }
+    model_config = ConfigDict(from_attributes=True)
+
 
 class GoogleCredentialsCreate(BaseModel):
     user_id: int
@@ -124,19 +126,12 @@ class GoogleCredentialsCreate(BaseModel):
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
 
-    class Config:
-        orm_mode = True
-        json_encoders = {
-            datetime: lambda v: v.isoformat() if v else None
-        }
+    model_config = ConfigDict(from_attributes=True)
+
 
 class GoogleCredentialsUpdate(BaseModel):
     access_token: Optional[str] = None
     refresh_token: Optional[str] = None
     updated_at: Optional[datetime] = None
 
-    class Config:
-        orm_mode = True
-        json_encoders = {
-            datetime: lambda v: v.isoformat() if v else None
-        }
+    model_config = ConfigDict(from_attributes=True)

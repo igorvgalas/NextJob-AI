@@ -3,3 +3,18 @@ db.sqlite3
 
 # Ignore migrations
 migrations/
+
+# Python cache files
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+*.log
+*.pot
+*.mo
+*.swp
+*.swo
+.DS_Store
+.vscode/
+.idea/
