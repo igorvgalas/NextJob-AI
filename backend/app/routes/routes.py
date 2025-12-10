@@ -78,15 +78,6 @@ async def get_skill(skill_id: int, db: AsyncSession = Depends(get_db), current_u
     return skill
 
 
-# @router.post("/skills", response_model=schemas.Skill)
-# async def create_skill(skill: schemas.SkillCreate, db: AsyncSession = Depends(get_db), current_user: models.User = Depends(get_current_user)):
-#     db_skill = models.Skill(**skill.dict())
-#     db.add(db_skill)
-#     await db.commit()
-#     await db.refresh(db_skill)
-#     return db_skill
-
-
 # UserSkill Routes
 @router.get("/user_skills", response_model=List[schemas.UserSkill])
 async def get_user_skills(

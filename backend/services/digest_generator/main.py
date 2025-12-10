@@ -1,7 +1,8 @@
 import json
-
+import httpx
 import redis
 import requests
+import asyncio
 from analyzer import analyze_job
 
 r = redis.Redis(host="localhost", port=6379, db=0)
@@ -18,59 +19,57 @@ SERVICE_NAME = "digest_generator"
 SERVICE_SECRET = "digest_generator_secret"
 SERVICE_TOKEN_ENDPOINT = "http://localhost:8001/auth/token"
 
-def get_service_auth_token():
+async def fetch(url: str, params: dict | None = None):
+    async with httpx.AsyncClient(timeout=10) as client:
+        resp = await client.get(url, params=params)
+        resp.raise_for_status()
+        return resp.json()
+    
+async def get_service_auth_token():
     """
     Retrieves the service auth token from environment variables or a config file.
     """
-    response = requests.post(SERVICE_TOKEN_ENDPOINT, json={
-        "service_name": SERVICE_NAME,
-        "service_secret": SERVICE_SECRET
-    })
-    if response.status_code == 200:
-        return response.json().get("access_token")
-    raise Exception("Failed to retrieve service auth token")
-
-def fetch_user_tech_stack(user_id: int) -> list[str]:
     try:
-        response = requests.get(
-            f"http://0.0.0.0:8000/service/user_skills/user/{user_id}",
-            headers={"Authorization": f"Bearer {get_service_auth_token()}"},
-            timeout=10
-        )
-        response.raise_for_status()
-        data = response.json()
-        print(f"Fetched user skills for user {user_id}: {data}")
-        if isinstance(data, dict) and data:
-            skills = data.get("skills", [])
-            return [skill["name"] for skill in skills]
-        else:
-            print("No user skills found")
-            return []
+        async with httpx.AsyncClient(timeout=10) as client:
+            response = await client.post(
+                SERVICE_TOKEN_ENDPOINT,
+                data={"service_name": SERVICE_NAME, "service_secret": SERVICE_SECRET},
+            )
+            response.raise_for_status()
+            token_data = response.json()
+            return token_data.get("access_token", "")
+    except httpx.RequestError as e:
+        print(f"Error fetching service auth token: {e}")
+        return ""
 
-    except requests.RequestException as e:
-        print(f"Failed to fetch user skills: {e}")
+async def fetch_user_tech_stack(user_id: int) -> list[str]:
+    url = f"http://localhost:8000/users/{user_id}/tech_stack"
+    try:
+        tech_stack_data = await fetch(url)
+        return tech_stack_data.get("tech_stack", [])
+    except httpx.HTTPError as e:
+        print(f"Error fetching user tech stack: {e}")
         return []
 
-def send_bulk_to_api(jobs: list[dict]):
+async def send_bulk_to_api(jobs: list[dict]):
+    token = await get_service_auth_token()
+    headers = {"Authorization": f"Bearer {token}"}
     try:
-        response = requests.post(
-            API_URL, json={"job_offers": jobs}, headers={"Authorization": f"Bearer {get_service_auth_token()}"}, timeout=10)
-        if response.status_code == 201:
-            print(f"✅ Sent {len(jobs)} jobs to API.")
-        else:
-            print(f"API error {response.status_code}: {response.text}")
-    except requests.RequestException as e:
-        print(f"Failed to reach API: {e}")
+        async with httpx.AsyncClient(timeout=10) as client:
+            response = await client.post(API_URL, json={"jobs": jobs}, headers=headers)
+            response.raise_for_status()
+            print(f"✅ Successfully sent {len(jobs)} job offers to API.")
+    except httpx.HTTPError as e:
+        print(f"Error sending job offers to API: {e}")
 
-
-def analyze_and_send(jobs: dict) -> None:
+async def analyze_and_send(jobs: list[dict]) -> None:
     print(f"\n🔎 Analyzing {len(jobs)} job offers...")
     # Pass the list of job objects directly to analyze_job
-    tech_stack = fetch_user_tech_stack(user_id=1) # Replace with actual user ID
+    tech_stack = await fetch_user_tech_stack(user_id=1) # Replace with actual user ID
     if not tech_stack:
         print("No user tech stack found, skipping analysis.")
         return
-    analysis_result = analyze_job(jobs, tech_stack)
+    analysis_result = analyze_job({"jobs": jobs}, tech_stack)
 
     if not analysis_result:
         print("No valid analysis result returned")
@@ -81,7 +80,7 @@ def analyze_and_send(jobs: dict) -> None:
 
     job_results = analysis_result.get("results", [])
     if job_results:
-        send_bulk_to_api(job_results)
+        await send_bulk_to_api(job_results)
     else:
         print("⚠️ No job results found in analysis output.")
 
@@ -106,8 +105,8 @@ for message in pubsub.listen():
 
     except json.JSONDecodeError:
         print("Invalid JSON:", raw_data)
-
     # Analyze and POST every BUFFER_SIZE jobs
     if len(job_buffer) >= BUFFER_SIZE:
-        analyze_and_send(job_buffer)
+        asyncio.run(analyze_and_send(job_buffer))
         job_buffer.clear()
+

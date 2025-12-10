@@ -46,7 +46,6 @@ async def custom_jwt_login(
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
     strategy: JWTStrategy = auth_backend.get_strategy()  # type: ignore
     access_token = await strategy.write_token(user)
-    print(f"Access token generated for user {user.id} - {access_token}")
     refresh_token = create_refresh_token(user)
     return {
         "access": access_token,

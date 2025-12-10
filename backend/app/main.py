@@ -62,23 +62,3 @@ app.include_router(
 )
 
 app.include_router(service_routes, prefix="/service", tags=["service"])
-
-# Health check endpoints for sync vs async behavior comparison
-
-
-@app.get("/health/sync")
-def health_sync():
-    start = time.perf_counter()
-    # Simulate quick CPU-bound work
-    _ = sum(range(1000))
-    duration_ms = (time.perf_counter() - start) * 1000
-    return {"status": "ok", "mode": "sync", "duration_ms": round(duration_ms, 3)}
-
-
-@app.get("/health/async")
-async def health_async():
-    start = time.perf_counter()
-    # Simulate yielding to the event loop (I/O-like)
-    await asyncio.sleep(0)
-    duration_ms = (time.perf_counter() - start) * 1000
-    return {"status": "ok", "mode": "async", "duration_ms": round(duration_ms, 3)}
