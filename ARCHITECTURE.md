@@ -213,25 +213,25 @@ This keeps the design simple: clear blocks with thin, well-defined interfaces so
 
 ```mermaid
 flowchart LR
-  subgraph Mobile[Mobile App (React Native/Expo)]
+  subgraph Mobile_App
     MA[Screens + AsyncStorage]
   end
 
-  subgraph Backend[Backend API (FastAPI)]
+  subgraph Backend_API
     BAPI[Auth, Users, Skills, JobOffers]
     STM[ServiceAuthMiddleware (/service/*)]
     DB[(Database)]
   end
 
-  subgraph SvcAuth[Service Auth (FastAPI)]
+  subgraph Service_Auth
     SA[Issue JWT for services]
   end
 
-  subgraph Ingest[Gmail Reader]
+  subgraph Gmail_Reader
     GR[Poll Gmail, extract body]
   end
 
-  subgraph Analysis[Digest Generator]
+  subgraph Digest_Generator
     DG[Batch, call LLM, map offers]
   end
 
