@@ -219,7 +219,7 @@ flowchart LR
 
   subgraph Backend_API
     BAPI[Auth, Users, Skills, JobOffers]
-    STM[ServiceAuthMiddleware (/service/*)]
+    STM[ServiceAuthMiddleware]
     DB[(Database)]
   end
 
@@ -244,14 +244,14 @@ flowchart LR
   BAPI -- store creds --> DB
 
   GR -- POST /auth/token --> SA
-  GR -- GET /service/google-creds/all --> BAPI
+  GR -- GET service google-creds all --> BAPI
   GR -- read --> GAPI
   GR -- publish RawJobEmail --> R
 
   DG -- subscribe jobs --> R
-  DG -- GET /service/user_skills/user/{id} --> BAPI
+  DG -- GET service user_skills by user --> BAPI
   DG -- analyze --> LLM
-  DG -- POST /service/job_offers/bulk_create --> BAPI
+  DG -- POST service job_offers bulk_create --> BAPI
   BAPI -- write offers --> DB
 
   MA -- GET /job-offers --> BAPI
