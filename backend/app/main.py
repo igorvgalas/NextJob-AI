@@ -15,7 +15,6 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routes.routes import router
 from app.auth.router import router as auth_router
-from app.routes.service_routes import router as service_routes
 from app.rag.router import router as rag_router
 from app.users.router import router as users_router
 
@@ -47,4 +46,3 @@ app.include_router(router, tags=["api"])
 app.include_router(auth_router, prefix="/auth", tags=["auth"])
 app.include_router(users_router)
 app.include_router(rag_router)
-app.include_router(service_routes, tags=["service"])
