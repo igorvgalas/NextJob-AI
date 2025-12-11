@@ -9,7 +9,6 @@ from sqlalchemy.future import select
 from app import models
 from app.auth.auth import fastapi_users
 from app.database import get_db
-from app.helpers.service_token_verifire import verify_service_token
 from app.schemas.schemas import JobOfferBase, JobOfferBulkCreate, JobOfferPage, JobOfferRead
 
 get_current_user = fastapi_users.current_user()
@@ -75,7 +74,7 @@ async def delete_job_offer(
 service_router = APIRouter(
     prefix="/service/job_offers",
     tags=["service:jobs"],
-    dependencies=[Depends(verify_service_token)],
+    dependencies=[Depends(get_current_user)],
 )
 
 
