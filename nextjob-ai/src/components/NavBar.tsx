@@ -46,18 +46,28 @@ const NavBar: React.FC<NavBarProps> = ({ onLogout }) => {
             </Pressable>
           )}
         >
-          <Menu.Item
-            key="logout"
-            textValue="Logout"
-            onPress={() => {
-              setMenuOpen(false);
-              onLogout();
-            }}
+          <Menu.Backdrop />
+          <Menu.Content
+            backgroundColor="$black"
+            borderColor="$gray500"
+            borderWidth={1}
+            borderRadius="$md"
+            minWidth={150}
+            paddingVertical="$2"
           >
-            <Text color="$white" fontWeight="$bold">
-              Logout
-            </Text>
-          </Menu.Item>
+            <Menu.Item
+              key="logout"
+              textValue="Logout"
+              onPress={() => {
+                setMenuOpen(false);
+                onLogout();
+              }}
+            >
+              <Menu.ItemLabel color="$white" fontWeight="$bold">
+                Logout
+              </Menu.ItemLabel>
+            </Menu.Item>
+          </Menu.Content>
         </Menu>
       </HStack>
     </HStack>
