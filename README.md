@@ -1,6 +1,6 @@
 # NextJob AI
 
-NextJob AI is an intelligent platform designed to streamline job searching and recruitment using AI-powered tools. It features a modern web backend (Django), a mobile app (React Native/Expo), and various microservices for enhanced automation and integration.
+NextJob AI is an intelligent platform designed to streamline job searching and recruitment using AI-powered tools. It features a modern FastAPI backend and a mobile app (React Native/Expo). Legacy standalone microservices have been retired in favor of the simplified architecture v2 documented in `ARCHITECTURE.md`.
 
 ---
 
@@ -9,17 +9,17 @@ NextJob AI is an intelligent platform designed to streamline job searching and r
 - **AI-Powered Job Matching:** Get personalized job recommendations using advanced AI algorithms.
 - **Job Offer Management:** Easily create, edit, and manage job offers.
 - **Mobile App:** Access job listings and apply on the go with the NextJob AI mobile app.
-- **Microservices Architecture:** Modular services for scalability and maintainability.
+- **Background Integrations:** Gmail/LinkedIn ingestion and LLM-powered analysis run through backend integrations and workers.
 - **Secure & Scalable:** Built with best practices for security and performance.
 
 ---
 
 ## Tech Stack
 
-- **Backend:** FastApi
+- **Backend:** FastAPI
 - **Frontend:** React Native (Expo)
-- **Microservices:** Python
-- **Database:** PostgreSql
+- **Workers/Integrations:** Python helpers invoked from the backend
+- **Database:** PostgreSQL
 - **AI Integration:** OpenAI API
 - **DevOps:** Docker, GitHub Actions
 - **Python Environment:** venv
@@ -54,22 +54,12 @@ cp .env.example .env  # Add your environment variables
 npx expo start
 ```
 
-### 4. Microservices Setup
-
-```bash
-cd ../services/digest_generator
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-cp .env.example .env  # Add your API keys and configs
-```
-
 ---
 
 ## Environment Variables
 
-- Each service/app uses a `.env` file for configuration.
-- See `.env.example` in each folder for required variables.
+- Each app uses a `.env` file for configuration.
+- See `.env.example` in the relevant folder for required variables.
 
 ---
 
