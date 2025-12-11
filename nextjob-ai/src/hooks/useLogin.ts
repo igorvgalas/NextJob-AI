@@ -1,10 +1,9 @@
-
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Constants from 'expo-constants';
+import Constants from "expo-constants";
 
 interface LoginCredentials {
-  username: string;
+  email: string;
   password: string;
 }
 
@@ -25,7 +24,7 @@ export function useLogin() {
           "Content-Type": "application/x-www-form-urlencoded",
         },
         body: new URLSearchParams({
-          username: creds.username,
+          username: creds.email,
           password: creds.password,
         }).toString(),
       });
