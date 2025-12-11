@@ -1,11 +1,15 @@
-import os
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
-class Settings:
-    DATABASE_URL = os.getenv(
-        "DATABASE_URL", "postgresql://user:password@localhost/dbname")
-    SECRET_KEY = os.getenv("SECRET_KEY", "your-secret-key")
-    ALGORITHM = "HS256"
+class Settings(BaseSettings):
+    database_url: str = "postgresql://user:password@localhost/dbname"
+    secret_key: str = "your-secret-key"
+    algorithm: str = "HS256"
+    google_client_id: str | None = None
+    google_client_secret: str | None = None
+    google_redirect_uri: str | None = None
+
+    model_config = SettingsConfigDict(env_file=".env", case_sensitive=False)
 
 
 settings = Settings()

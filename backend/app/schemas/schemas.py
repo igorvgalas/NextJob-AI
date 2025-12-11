@@ -113,6 +113,8 @@ class GoogleCredentials(BaseModel):
     user_id: int
     access_token: str
     refresh_token: Optional[str] = None
+    scope: Optional[str] = None
+    token_type: Optional[str] = None
     created_at: datetime
     updated_at: datetime
 
@@ -123,6 +125,8 @@ class GoogleCredentialsCreate(BaseModel):
     user_id: int
     access_token: str
     refresh_token: Optional[str] = None
+    scope: Optional[str] = None
+    token_type: Optional[str] = None
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
 
@@ -132,6 +136,8 @@ class GoogleCredentialsCreate(BaseModel):
 class GoogleCredentialsUpdate(BaseModel):
     access_token: Optional[str] = None
     refresh_token: Optional[str] = None
+    scope: Optional[str] = None
+    token_type: Optional[str] = None
     updated_at: Optional[datetime] = None
 
     model_config = ConfigDict(from_attributes=True)
