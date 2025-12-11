@@ -35,7 +35,7 @@ This document explains how the app works today, highlights gaps, and proposes a 
 
 3. Ingestion (gmail_reader → backend → Gmail)
 
-- Gmail Reader gets a service JWT from `services/service_auth`.
+- Gmail Reader gets a service JWT from the backend service-auth helper (no standalone microservice directory).
 - Calls backend `GET /service/google-creds/all` to fetch `{ email → {access_token, refresh_token, user_id} }`.
 - Builds Gmail clients and scans recent messages, extracts plain/html body, filters by keywords.
 - Publishes raw job email to Redis channel `jobs`:
@@ -66,7 +66,7 @@ This document explains how the app works today, highlights gaps, and proposes a 
 - Tech stack endpoint: Digest Generator calls `/users/{id}/tech_stack` which doesn’t exist. Use `/service/user_skills/user/{id}` and map `skills[].name` → tech stack.
 - Multi-tenancy: `GET /job-offers` doesn’t filter by `current_user`; should filter to return only the caller’s offers.
 - Idempotency: Gmail Reader tracks processed IDs in a local file; move to DB (`gmail_ingest_log` with `gmail_message_id`, `user_id`, `created_at`) to avoid reprocessing and support scaling.
-- Secrets/config: Service secrets are hardcoded in `services/service_auth/config.py`. Move to env vars and `.env`.
+- Secrets/config: Service secrets should be provided via environment variables for the backend service-auth helper rather than hardcoded values.
 - LLM client: `g4f` with `model="gpt-4"` is brittle; prefer official providers (OpenAI, Anthropic, etc.) via env-configured keys.
 
 ## Target Architecture (Modular Blocks)
