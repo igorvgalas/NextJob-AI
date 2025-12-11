@@ -1,4 +1,4 @@
-import gluestackPlugin from '@gluestack-ui/nativewind-utils/tailwind-plugin';
+// Gluestack Tailwind plugin is optional; removed to avoid missing module errors.
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -199,5 +199,5 @@ module.exports = {
       },
     },
   },
-  plugins: [gluestackPlugin],
+  plugins: [],
 };
