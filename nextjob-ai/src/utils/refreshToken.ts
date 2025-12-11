@@ -23,7 +23,7 @@ export const refreshToken = async (): Promise<string> => {
   }
 
   try {
-    const response = await fetch(`${Constants.expoConfig.extra.BASE_URL}/auth/refresh`, {
+    const response = await fetch(`${Constants.expoConfig.extra.BASE_URL}/auth/jwt/refresh`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

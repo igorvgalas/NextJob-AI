@@ -31,11 +31,11 @@ interface GoogleAuthResponse {
   access: string;
   refresh: string;
   user: {
-    pk: number;
-    username: string;
+    id: number;
+    username?: string;
     email: string;
-    first_name: string;
-    last_name: string;
+    first_name?: string;
+    last_name?: string;
   };
   created: boolean;
 }
@@ -47,51 +47,44 @@ export default function LoginScreen() {
   const login = useLogin();
   const iosClientId = Constants.expoConfig?.extra?.IOS_GOOGLE_CLIENT_ID;
 
-  const [request, response, promptAsync] = Google.useAuthRequest(
-    iosClientId
-      ? {
-          iosClientId,
-          redirectUri: "ai.nextjob.client:/oauth2redirect/google",
-          scopes: [
-            "profile",
-            "email",
-            "https://www.googleapis.com/auth/gmail.readonly",
-          ],
-        }
-      : {}
-  );
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    iosClientId,
+    redirectUri: "ai.nextjob.client:/oauth2redirect/google",
+    responseType: "code",
+    scopes: ["profile", "email", "https://www.googleapis.com/auth/gmail.readonly"],
+  });
 
   const handleTogglePassword = () => setShowPassword((prev) => !prev);
 
   const googleMutation = useApiMutation<
-    { id_token: string; accessToken?: string },
+    { code: string; code_verifier?: string },
     GoogleAuthResponse
-  >(({ id_token, accessToken }) => ({
-    url: "/auth/google-login",
+  >(({ code, code_verifier }) => ({
+    url: "/auth/google/exchange-code",
     options: {
       method: "POST",
-      body: { id_token, accessToken },
+      body: { code, code_verifier },
     },
   }));
 
   useEffect(() => {
     const handleGoogleResponse = async () => {
-      if (response?.type !== "success") return;
-      const authentication = response.authentication;
-      const id_token = (authentication as { idToken?: string })?.idToken;
-      const accessToken = authentication.accessToken;
-      if (!id_token) return;
+      if (!response || response.type !== "success") return;
+
+      const authorizationCode = response.params?.code;
+      if (!authorizationCode) return;
 
       try {
-        const res = await googleMutation.mutateAsync({ id_token, accessToken });
+        const res = await googleMutation.mutateAsync({
+          code: authorizationCode,
+          code_verifier: request?.codeVerifier || undefined,
+        });
         const { access, refresh, user, created } = res;
-        console.log("Google login response:", res);
 
-        // Save tokens and setToken BEFORE navigation
         await AsyncStorage.setItem("token", access);
         await AsyncStorage.setItem("refreshToken", refresh);
         setToken(access);
-        // Delay navigation to ensure context updates
+
         setTimeout(() => {
           const missingProfile =
             created ||
@@ -101,23 +94,20 @@ export default function LoginScreen() {
             user.email === user.username;
 
           if (missingProfile) {
-            console.log("Redirecting to CompleteProfile");
             // @ts-expect-error
             navigation.navigate("CompleteProfile" as never, { user } as never);
           } else {
-            console.log("Redirecting to Home");
             navigation.navigate("Home" as never);
           }
         }, 100);
-        console.log("✅ Authenticated user:", user);
       } catch (error: any) {
         console.error("❌ Google login failed:", error);
-        Alert.alert("Google login failed", error.message);
+        Alert.alert("Google login failed", error.message || "Something went wrong");
       }
     };
 
     handleGoogleResponse();
-  }, [response]);
+  }, [response, request?.codeVerifier]);
 
   return (
     <AuthLayout>
@@ -131,7 +121,7 @@ export default function LoginScreen() {
       />
 
       <Formik
-        initialValues={{ username: "", password: "" }}
+        initialValues={{ email: "", password: "" }}
         onSubmit={(values) => {
           login(values);
         }}
@@ -144,7 +134,7 @@ export default function LoginScreen() {
                 <Input borderColor="$coolGray600">
                   <InputField
                     type="text"
-                    value={values.username}
+                    value={values.email}
                     onChangeText={handleChange("email")}
                     placeholder="Enter your email"
                     color="$white"
@@ -174,7 +164,7 @@ export default function LoginScreen() {
                 bg="$blue600"
                 borderRadius="$md"
                 onPress={handleSubmit as any}
-                isDisabled={!values.username || !values.password}
+                isDisabled={!values.email || !values.password}
               >
                 <ButtonText color="$white" fontWeight="$bold">
                   Log in
@@ -196,6 +186,7 @@ export default function LoginScreen() {
                 alignItems="center"
                 justifyContent="center"
                 onPress={() => promptAsync()}
+                isDisabled={!request}
               >
                 <AntDesign
                   name="google"
