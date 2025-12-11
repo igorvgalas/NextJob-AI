@@ -42,7 +42,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(router, tags=["api"])
+app.include_router(router)
 app.include_router(auth_router, prefix="/auth", tags=["auth"])
 app.include_router(users_router)
 app.include_router(rag_router)
