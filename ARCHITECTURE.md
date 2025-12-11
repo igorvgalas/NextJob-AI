@@ -12,6 +12,14 @@ This document explains how the app works today, highlights gaps, and proposes a 
 - Messaging via Redis Pub/Sub for service-to-service events.
 - Service-to-service auth via lightweight JWT microservice.
 
+## Simplified architecture (v2-friendly)
+
+- **Backend (single FastAPI app)** with domain modules: `auth/`, `users/`, `jobs/`, `skills/`, `integrations/`, and `rag/` (RAG endpoints are exposed under `/rag`).
+- **Worker**: either a Celery worker in the same image or APScheduler/cron tasks invoked via the integrations helpers (e.g., Gmail reader, LinkedIn scraper).
+- **Database**: PostgreSQL + `pgvector` (configured through the existing async SQLAlchemy engine).
+- **Integrations**: service-scoped endpoints live under `/service/*` for Gmail credentials and bulk job ingestion, with helpers in `app/integrations/` to trigger the existing ingestion scripts.
+- **Mobile app**: communicates only through the backend HTTP API; no direct coupling to workers.
+
 ## Current Data Flow
 
 1. User auth (mobile → backend)

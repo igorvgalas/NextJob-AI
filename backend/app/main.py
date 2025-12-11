@@ -12,23 +12,21 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from fastapi import FastAPI
-import asyncio
-import time
 from fastapi.middleware.cors import CORSMiddleware
-from app.auth.auth import fastapi_users
+
 from app.middleware.allowed_hosts import AllowedHostsMiddleware
 from app.middleware.service_token_middleware import ServiceAuthMiddleware
-from app.schemas.schemas import UserRead, UserUpdate
 from app.routes.routes import router
 from app.auth.router import router as auth_router
 from app.routes.service_routes import router as service_routes
+from app.rag.router import router as rag_router
+from app.users.router import router as users_router
 
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(
-    ',') if os.getenv('ALLOWED_HOSTS') else []
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',') if os.getenv('ALLOWED_HOSTS') else []
 
 app = FastAPI(debug=True, title="NextJob AI API", version="1.0.0")
 
@@ -52,13 +50,7 @@ app.add_middleware(
 )
 
 app.include_router(router, tags=["api"])
-
 app.include_router(auth_router, prefix="/auth", tags=["auth"])
-
-app.include_router(
-    fastapi_users.get_users_router(UserRead, UserUpdate),
-    prefix="/users",
-    tags=["users"]
-)
-
-app.include_router(service_routes, prefix="/service", tags=["service"])
+app.include_router(users_router)
+app.include_router(rag_router)
+app.include_router(service_routes, tags=["service"])

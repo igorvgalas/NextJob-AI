@@ -2,6 +2,7 @@ from fastapi import Depends, HTTPException, status, Request
 from jose import jwt, JWTError
 from services.service_auth.config import JWT_SECRET, JWT_ALGORITHM
 
+
 def verify_service_token(request: Request):
     auth_header = request.headers.get("Authorization")
     if not auth_header or not auth_header.startswith("Bearer "):
