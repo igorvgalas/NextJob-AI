@@ -1,16 +1,16 @@
-"""Integration-facing endpoints (service scope)."""
+"""Integration-facing endpoints for authenticated monolith users."""
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 
 from app import models
+from app.auth.auth import fastapi_users
 from app.database import get_db
-from app.helpers.service_token_verifire import verify_service_token
 
-router = APIRouter(
-    prefix="/service", tags=["service:integrations"], dependencies=[Depends(verify_service_token)]
-)
+get_current_user = fastapi_users.current_user()
+
+router = APIRouter(prefix="/service", tags=["service:integrations"], dependencies=[Depends(get_current_user)])
 
 
 @router.get("/google-creds/all", response_model=dict)

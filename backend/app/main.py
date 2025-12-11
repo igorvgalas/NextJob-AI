@@ -13,9 +13,6 @@ load_dotenv()
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
-from app.middleware.allowed_hosts import AllowedHostsMiddleware
-from app.middleware.service_token_middleware import ServiceAuthMiddleware
 from app.routes.routes import router
 from app.auth.router import router as auth_router
 from app.routes.service_routes import router as service_routes
@@ -37,9 +34,6 @@ async def log_requests(request, call_next):
     response = await call_next(request)
     logger.info("Response: %s", response.status_code)
     return response
-
-app.add_middleware(AllowedHostsMiddleware)
-app.add_middleware(ServiceAuthMiddleware)
 
 app.add_middleware(
     CORSMiddleware,

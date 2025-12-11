@@ -1,4 +1,4 @@
-"""Aggregates service-scoped API routes protected by service token middleware."""
+"""Aggregates service-scoped API routes protected by standard user auth."""
 from fastapi import APIRouter
 
 from app.integrations.router import router as integrations_router

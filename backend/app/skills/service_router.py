@@ -1,18 +1,18 @@
-"""Service-only skill endpoints protected by service token."""
+"""Service-only skill endpoints protected by user authentication."""
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 
 from app import models
+from app.auth.auth import fastapi_users
 from app.database import get_db
-from app.helpers.service_token_verifire import verify_service_token
 from app.schemas import schemas
 
 router = APIRouter(
     prefix="/service/user_skills",
     tags=["service:user-skills"],
-    dependencies=[Depends(verify_service_token)],
+    dependencies=[Depends(fastapi_users.current_user())],
 )
 
 
