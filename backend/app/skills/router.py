@@ -26,28 +26,6 @@ async def get_skills(
     return result.scalars().all()
 
 
-@router.get("/{skill_id}", response_model=schemas.Skill)
-async def get_skill(
-    skill_id: int,
-    db: AsyncSession = Depends(get_db),
-    current_user: models.User = Depends(get_current_user),
-):
-    result = await db.execute(select(models.Skill).where(models.Skill.id == skill_id))
-    skill = result.scalars().first()
-    if not skill:
-        raise HTTPException(status_code=404, detail="Skill not found")
-    return skill
-
-
-@user_skills_router.get("", response_model=List[schemas.UserSkill])
-async def get_user_skills(
-    db: AsyncSession = Depends(get_db),
-    current_user: models.User = Depends(get_current_user),
-):
-    result = await db.execute(select(models.UserSkill))
-    return result.scalars().all()
-
-
 @user_skills_router.get("/user/{user_id}", response_model=schemas.UserSkill)
 async def get_user_skills_by_user(
     user_id: int,
@@ -124,18 +102,3 @@ async def update_user_skill(
     await db.refresh(user_skill)
 
     return user_skill
-
-
-@user_skills_router.get("/stats", response_model=List[schemas.UserSkillStat])
-async def get_user_skill_stats(
-    db: AsyncSession = Depends(get_db),
-    current_user: models.User = Depends(get_current_user),
-):
-    result = await db.execute(select(models.UserSkill))
-    stats = result.scalars().all()
-    return [
-        schemas.UserSkillStat(
-            username=f"User {stat.user_id}", num_skills=len(stat.skills)
-        )
-        for stat in stats
-    ]

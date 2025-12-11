@@ -1,5 +1,4 @@
-"""Job domain routers for public and service APIs."""
-from typing import List
+"""Job domain routers for public APIs."""
 
 from fastapi import APIRouter, Depends, HTTPException, Request, Query
 from sqlalchemy import func
@@ -69,25 +68,3 @@ async def delete_job_offer(
     await db.delete(job_offer)
     await db.commit()
     return job_offer
-
-
-service_router = APIRouter(
-    prefix="/service/job_offers",
-    tags=["service:jobs"],
-    dependencies=[Depends(get_current_user)],
-)
-
-
-@service_router.post("/bulk_create", response_model=List[JobOfferRead])
-async def create_job_offers_bulk(
-    payload: JobOfferBulkCreate,
-    db: AsyncSession = Depends(get_db),
-):
-    offers = [models.JobOffer(**offer.model_dump(exclude_unset=True)) for offer in payload.job_offers]
-    db.add_all(offers)
-    await db.commit()
-
-    for offer in offers:
-        await db.refresh(offer)
-
-    return offers
